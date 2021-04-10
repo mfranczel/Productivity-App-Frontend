@@ -1,33 +1,28 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
 import { Provider } from 'react-redux'
-import { PersistGate } from 'redux-persist/integration/react';
 import getStore from './store'
+import Login from './screens/Login'
+import Register from './screens/Register'
+import { NavigationContainer } from '@react-navigation/native'
+import { createStackNavigator } from '@react-navigation/stack'
 
-const { store, persistor } = getStore()
+const { store } = getStore()
 
-console.log(store)
+const Stack = createStackNavigator()
+
 const App = () => {
+
   return (
     <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <View style={styles.container}>
-          <Text>Open up App.tsx to start working on your app!</Text>
-          <StatusBar style="auto" />
-        </View>
-      </PersistGate>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Login" screenOptions={{headerShown: false}}>
+            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="Register" component={Register} />
+        </Stack.Navigator>
+      </NavigationContainer>
     </Provider>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
 
 export default App
