@@ -1,13 +1,20 @@
 import { TextInput, View, StyleSheet, Text, Button, TouchableOpacity } from "react-native"
-import {connect, useDispatch} from 'react-redux'
-import React, {useState} from 'react'
-import User from "../actions/User"
+import { useDispatch, useSelector } from 'react-redux'
+import { getProfile, login } from '../slices/userSlice'
+import React, {useEffect, useState} from 'react'
 
-const Login = ({ navigation, login}) => {
+const Login = ({ navigation }) => {
 
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const dispatch = useDispatch()
+    const error = useSelector(state => state.user.error)
+    const isAuth = useSelector(state => state.user.isAuth)
+    const user = useSelector(state => state.user.currentUser)
+
+    useEffect(() => {
+        dispatch(getProfile())
+    }, [])
 
     const onLoginButtonClick = () => {
         dispatch(login(email, password))
@@ -18,6 +25,7 @@ const Login = ({ navigation, login}) => {
             <Text style={styles.header}>To do</Text>
             <TextInput style={styles.input} placeholder="Email" value={ email } onChangeText={ text => setEmail(text) } />
             <TextInput secureTextEntry={true} style={styles.input} placeholder="Password" value={ password } onChangeText={ text => setPassword(text) } />
+            <Text style={{width: 260, textAlign: "center"}}>{isAuth ? "Logged in! " : error.message}</Text>
             <TouchableOpacity style={styles.loginButton} onPress={() => onLoginButtonClick()}>
                 <Text style={styles.loginText}>Login</Text>
             </TouchableOpacity>
@@ -85,17 +93,5 @@ const styles = StyleSheet.create({
     }
   });
 
-const mapStateToProps = (state) => {
-    const {loggedIn} = state.auth
-    return {
-        loggedIn
-    }
-}
 
-const mapDispatchToProps = (dispatch) => {
-    return {login: User.login}
-}
-  
-const connectedApp = connect(mapStateToProps, mapDispatchToProps)(Login)
-
-export default connectedApp
+export default Login

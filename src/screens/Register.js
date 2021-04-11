@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Platform } from "react-native"
 import React, {useState} from 'react'
 import DateTimePicker from '@react-native-community/datetimepicker'
+import UserService from "../services/UserService"
 
 const Register = ({ navigation }) => {
 
@@ -8,11 +9,22 @@ const Register = ({ navigation }) => {
     const [password, setPassword] = useState("")
     const [birthDate, setBirthDate] = useState(new Date('1969-04-20'))
     const [show, setShow] = useState(false)
+    const [error, setError] = useState("")
 
     const onDatePickerChange = (event, selectedDate) => {
         selectedDate = selectedDate || birthDate
         setShow(Platform.OS === 'ios')
         setBirthDate(selectedDate)
+    }
+
+    const handleRegister = () => {
+        UserService.register(email, password, birthDate.toISOString().split('T')[0])
+            .then((res) => {
+                navigation.goBack()
+            })
+            .catch((err) => {
+                setError(err)
+            })
     }
 
     return (
@@ -26,7 +38,8 @@ const Register = ({ navigation }) => {
             {
               show && <DateTimePicker mode="date" display="spinner" value={birthDate} onChange={onDatePickerChange}/>
             }
-            <TouchableOpacity style={styles.loginButton}>
+            <Text style={{width: 260, textAlign: "center"}}>{error}</Text>
+            <TouchableOpacity style={styles.loginButton} onPress={() => handleRegister()}>
                 <Text style={styles.loginText}>Register</Text>
             </TouchableOpacity>
             <View style={styles.divider}>
