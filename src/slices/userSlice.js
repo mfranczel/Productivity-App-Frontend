@@ -59,6 +59,7 @@ export const getProfile = () => async (dispatch) => {
         var account = await UserService.getProfile()
         dispatch(userSlice.actions.setAuthSuccess(account))
     } catch (err) {
+        console.log(err)
         dispatch(userSlice.actions.setAuthFailed(err))
     } finally {
         dispatch(userSlice.actions.setLoading(false))
