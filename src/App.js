@@ -6,7 +6,8 @@ import Register from './screens/Register'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import Habit from './screens/Habits';
-
+import {AppRegistry} from 'react-native';
+import {registerRootComponent} from 'expo'
 const { store } = getStore()
 
 const Stack = createStackNavigator()
@@ -26,5 +27,6 @@ const App = () => {
   );
 }
 
+registerRootComponent(App)
 
 export default App
