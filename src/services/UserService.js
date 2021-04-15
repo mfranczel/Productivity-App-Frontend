@@ -20,7 +20,7 @@ export default {
             } else if (err.response.status == 500){
                 throw "Server error occured"
             } else {
-                throw err.message
+                throw "Other error"
             }
         }
     },
@@ -50,9 +50,7 @@ export default {
                     throw "Server error occured"
                 }
             } catch (err) {
-                if (err.response.status == 200) {
-                    return res.data
-                } else if (err.response.status == 400) {
+                if (err.response.status == 400) {
                     throw "Token is invalid"
                 } else {
                     throw "Server error occured"
@@ -61,5 +59,5 @@ export default {
         } else {
             throw "User not signed in"
         }
-    },
+    }
 }
