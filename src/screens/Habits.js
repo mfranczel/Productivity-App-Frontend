@@ -12,7 +12,7 @@ const Habit = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#000',
+      backgroundColor: '#fff',
       alignItems: 'center',
       paddingTop: 220,
       height: "100%"

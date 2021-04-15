@@ -1,11 +1,18 @@
 import axios from './helper'
 import * as SecureStore from 'expo-secure-store';
+import { Platform } from 'react-native';
 
 export default {
     login: async (email, password) => {
         try {
             var res = await axios.post('/user/login', {email, password})
-            await SecureStore.setItemAsync('token', res.data.token)
+
+            if (Platform.OS !== 'web') {
+                await SecureStore.setItemAsync('token', res.data.token)
+            } else {
+                localStorage.setItem('token', res.data.token)
+            }
+
             return res.data.token
         } catch(err) {
             if (err.response.status == 400) {
@@ -20,19 +27,17 @@ export default {
     register: async (email, password, birthDate) => {
         try {
             await axios.post('/user', {email: email, password: password, birthDate: birthDate})
-            return true
         } catch (err) {
-            if (err.response.status == 400) {
-                throw "Information provided is invalid"
-            } else if (err.response.status == 500){
-                throw "Server error occured"
-            } else {
-                throw err.message
-            }
+            throw "Bad info. provided"
         }
     },
     getProfile: async () => {
-        const token = await SecureStore.getItemAsync('token');
+        var token = ""
+        if (Platform.OS !== 'web') {
+            token = await SecureStore.getItemAsync('token');
+        } else {
+            token = localStorage.getItem('token')
+        }
 
         if (token){
             try {
