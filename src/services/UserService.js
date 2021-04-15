@@ -31,6 +31,16 @@ export default {
             throw "Bad info. provided"
         }
     },
+    getImage: async() => {
+        var token = ""
+        if (Platform.OS !== 'web') {
+            token = await SecureStore.getItemAsync('token');
+        } else {
+            token = localStorage.getItem('token')
+        }
+
+        
+    },
     getProfile: async () => {
         var token = ""
         if (Platform.OS !== 'web') {

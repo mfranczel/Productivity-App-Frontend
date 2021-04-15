@@ -31,7 +31,7 @@ const Register = ({ navigation }) => {
         <View style={styles.container}>
             <Text style={styles.header}>To do</Text>
             <TextInput style={styles.input} placeholder="Email" value={email} onChangeText={ text => setEmail(text)}/>
-            <TextInput style={styles.input} placeholder="Password" value={password} onChangeText={ text => setPassword(text)}/>
+            <TextInput secureTextEntry={true} style={styles.input} placeholder="Password" value={password} onChangeText={ text => setPassword(text)}/>
             <TouchableOpacity  onPress={() => setShow(true)}>
                 <TextInput style={styles.input} placeholder="04/20/1969" editable={false} value={birthDate.getDate() + "/" + (birthDate.getMonth()+1) + "/" + birthDate.getFullYear()}/>
             </TouchableOpacity>

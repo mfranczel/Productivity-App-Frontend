@@ -62,36 +62,22 @@ const Tabbar = ({ state, descriptors, navigation }) => {
                 };
 
                 return (
-                    <>
-                    { index !== 2 ? 
-                            <TouchableOpacity
-                                    accessibilityRole="button"
-                                    accessibilityState={isFocused ? { selected: true } : {}}
-                                    accessibilityLabel={options.tabBarAccessibilityLabel}
-                                    testID={options.tabBarTestID}
-                                    onPress={onPress}
-                                    onLongPress={onLongPress}
-                                    style={styles.button}
-                                    style={{width: getWidth(index), justifyContent: "center",
-                                    alignItems: "center",}}
-                                >
-                                <FontAwesomeIcon style={{color: "white"}} icon={getIcon(index)} size={ 32 }  />
+                    <TouchableOpacity
+                        accessibilityRole="button"
+                        accessibilityState={isFocused ? { selected: true } : {}}
+                        accessibilityLabel={options.tabBarAccessibilityLabel}
+                        testID={options.tabBarTestID}
+                        onPress={onPress}
+                        onLongPress={onLongPress}
+                        style={index !== 2 ? {width: getWidth(index), justifyContent: "center",
+                        alignItems: "center",} : styles.roundButton}
+                        key={index}>
+
+                        <FontAwesomeIcon style={{color: "white"}} icon={getIcon(index)} size={ 32 }  />
                                 
-                            </TouchableOpacity>:
-                            <TouchableOpacity
-                                    accessibilityRole="button"
-                                    accessibilityState={isFocused ? { selected: true } : {}}
-                                    accessibilityLabel={options.tabBarAccessibilityLabel}
-                                    testID={options.tabBarTestID}
-                                    onPress={onPress}
-                                    onLongPress={onLongPress}
-                                    style={styles.roundButton}
-                                >
-                                <FontAwesomeIcon style={{color: "white"}} icon={getIcon(index)} size={ 32 }  /> 
-                            </TouchableOpacity>
-                    }
-                    </>
-                )
+                    </TouchableOpacity>)
+                    
+                
             })}    
         </View>
     )
@@ -100,7 +86,7 @@ const Tabbar = ({ state, descriptors, navigation }) => {
 const styles = StyleSheet.create({
     bar: {
         flexDirection: "row",
-        height: 60,
+        height: 50,
         width: "100%",
         backgroundColor: "#FF5B5B",
         justifyContent: "center",
@@ -113,14 +99,14 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     roundButton: {
-        width: 60,
-        height: 60,
+        width: 65,
+        height: 65,
         borderRadius: 50,
         borderColor: "white",
         backgroundColor: "#FF5B5B",
         borderWidth: 3,
         position: "absolute",
-        bottom: 30,
+        bottom: 20,
         justifyContent: "center",
         alignItems: "center",
     }
