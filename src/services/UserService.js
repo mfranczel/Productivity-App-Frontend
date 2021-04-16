@@ -13,12 +13,16 @@ export default {
             }
             return res.data.token
         } catch(err) {
-            if (err.response.status == 400) {
-                throw "Bad credentials"
-            } else if (err.response.status == 500){
-                throw "Server error occured"
+            if (err.response) {
+                if (err.response.status == 400) {
+                    throw "Bad credentials"
+                } else if (err.response.status == 500){
+                    throw "Server error occured"
+                } else {
+                    throw "Other error"
+                }
             } else {
-                throw "Other error"
+                throw err.message
             }
         }
     },
