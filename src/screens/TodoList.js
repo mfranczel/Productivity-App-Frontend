@@ -4,7 +4,7 @@ import { TextInput, View, StyleSheet, Text, Button, TouchableOpacity } from "rea
 const TodoList = ({ navigation }) => {
     return (
         <View style={styles.container}>
-
+            <Text>text</Text>
         </View>
     )
 }
