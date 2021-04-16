@@ -1,28 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Provider} from 'react-redux'
 import getStore from './store'
-import Login from './screens/Login'
-import Register from './screens/Register'
-import { NavigationContainer } from '@react-navigation/native'
-import { createStackNavigator } from '@react-navigation/stack'
-import Habit from './screens/Habits';
-import {AppRegistry} from 'react-native';
+import Home from './Home';
 import {registerRootComponent} from 'expo'
-const { store } = getStore()
 
-const Stack = createStackNavigator()
+const { store } = getStore()
 
 const App = () => {
 
   return (
     <Provider store={store}>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName={"Login"} screenOptions={{headerShown: false}}>
-            <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="Register" component={Register} />
-            <Stack.Screen name="Habit" component={Habit} />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <Home />
     </Provider>
   );
 }

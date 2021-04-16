@@ -6,11 +6,13 @@ export default {
     login: async (email, password) => {
         try {
             var res = await axios.post('/user/login', {email, password})
+
             if (Platform.OS !== 'web') {
                 await SecureStore.setItemAsync('token', res.data.token)
             } else {
                 localStorage.setItem('token', res.data.token)
             }
+
             return res.data.token
         } catch(err) {
             if (err.response) {
@@ -29,23 +31,26 @@ export default {
     register: async (email, password, birthDate) => {
         try {
             await axios.post('/user', {email: email, password: password, birthDate: birthDate})
-            return true
         } catch (err) {
-            if (err.response.status == 400) {
-                throw "Information provided is invalid"
-            } else if (err.response.status == 500){
-                throw "Server error occured"
-            } else {
-                throw "Other error"
-            }
+            throw "Bad info. provided"
         }
+    },
+    getImage: async() => {
+        var token = ""
+        if (Platform.OS !== 'web') {
+            token = await SecureStore.getItemAsync('token');
+        } else {
+            token = localStorage.getItem('token')
+        }
+
+        
     },
     getProfile: async () => {
         var token = ""
         if (Platform.OS !== 'web') {
             token = await SecureStore.getItemAsync('token');
         } else {
-            token = await localStorage.getItem('token')
+            token = localStorage.getItem('token')
         }
 
         if (token){
