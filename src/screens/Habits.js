@@ -14,7 +14,7 @@ const Habit = ({ navigation }) => {
                 <TouchableOpacity style={styles.day}><Text style={{color:"#FF5B5B"}}>S</Text></TouchableOpacity>
                 <TouchableOpacity style={styles.day}><Text style={{color:"#FF5B5B"}}>S</Text></TouchableOpacity>
             </View>
-            <ScrollView>
+            <ScrollView style={{width: "100%"}}>
                 <HabitItem />
                 <HabitItem />
                 <HabitItem />
