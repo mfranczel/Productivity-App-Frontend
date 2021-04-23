@@ -5,16 +5,23 @@ import { TextInput, View, StyleSheet, Text, Button, TouchableOpacity } from "rea
 const Timer = ({ navigation }) => {
 
     const [rounds, setRounds] = useState(1);
-    const onPressRoundsUp = () => setRounds(prevRounds => prevRounds + 1);
-    const onPressRoundsDown = () => setRounds(prevRounds => (prevRounds -1 < 1 ? 1 : prevRounds - 1));
+    const onPressRoundsUp = () => setRounds(prevRounds => prevRounds + 1)
+    const onPressRoundsDown = () => setRounds(prevRounds => (prevRounds -1 < 1 ? 1 : prevRounds - 1))
 
     const [breaks, setBreaks] = useState(5);
-    const onPressBreaksUp = () => setBreaks(prevBreaks => prevBreaks + 1);
-    const onPressBreaksDown = () => setBreaks(prevBreaks => ((prevBreaks - 1 < 1) ? 1:  prevBreaks - 1 ));
+    const onPressBreaksUp = () => setBreaks(prevBreaks => prevBreaks + 1)
+    const onPressBreaksDown = () => setBreaks(prevBreaks => ((prevBreaks - 1 < 1) ? 1:  prevBreaks - 1 ))
 
     const [timer, setTimer] = useState(25);
-    const onPressTimerUp = () => setTimer(prevTimer => prevTimer + 1);
-    const onPressTimerDown = () => setTimer(prevTimer => ((prevTimer -1 < 1) ? 1 : prevTimer - 1));
+    const onPressTimerUp = () => setTimer(prevTimer => prevTimer + 1)
+    const onPressTimerDown = () => setTimer(prevTimer => ((prevTimer -1 < 1) ? 1 : prevTimer - 1))
+
+    const onPressReset = () => {
+        setRounds(1)
+        setBreaks(5)
+        setTimer(25)
+    }
+
 
 
     return (
@@ -59,7 +66,7 @@ const Timer = ({ navigation }) => {
                 <TouchableOpacity style={styles.pauseButton}>
                     <Text style={styles.pauseText}>Pause</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.resetButton}>
+                <TouchableOpacity style={styles.resetButton} onPress={onPressReset}>
                     <Text style={styles.resetText}>Reset</Text>
                 </TouchableOpacity>
 
