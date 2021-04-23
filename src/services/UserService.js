@@ -15,10 +15,14 @@ export default {
 
             return res.data.token
         } catch(err) {
-            if (err.response.status == 400) {
-                throw "Bad credentials"
-            } else if (err.response.status == 500){
-                throw "Server error occured"
+            if (err.response) {
+                if (err.response.status == 400) {
+                    throw "Bad credentials"
+                } else if (err.response.status == 500){
+                    throw "Server error occured"
+                } else {
+                    throw "Other server error"
+                }
             } else {
                 throw "Other error"
             }
@@ -52,18 +56,16 @@ export default {
         if (token){
             try {
                 var res = await axios.get('/user', {headers: {"Authorization": `Bearer ${token}`}})
-                if (res.status == 200) {
-                    return res.data
-                } else if (res.status == 400) {
-                    throw "Information provided is invalid"
-                } else {
-                    throw "Server error occured"
-                }
+                return res.data
             } catch (err) {
-                if (err.response.status == 400) {
-                    throw "Token is invalid"
+                if (err.response) {
+                    if (err.response.status === 400) {
+                        throw "Token is invalid"
+                    } else {
+                        throw "Server error occured"
+                    }
                 } else {
-                    throw "Server error occured"
+                    throw "Connection error"
                 }
             }
         } else {
