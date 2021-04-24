@@ -56,6 +56,7 @@ export default {
         if (token){
             try {
                 var res = await axios.get('/user', {headers: {"Authorization": `Bearer ${token}`}})
+                res.data.token = token
                 return res.data
             } catch (err) {
                 if (err.response) {

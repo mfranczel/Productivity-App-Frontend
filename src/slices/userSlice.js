@@ -44,6 +44,7 @@ export const login = (email, password) => async (dispatch) => {
     try {
         var token = await UserService.login(email, password)
         var account = await UserService.getProfile(token)
+        account.token = token
         dispatch(userSlice.actions.setAuthSuccess(account))
     } catch(err) {
         dispatch(userSlice.actions.setAuthFailed(err))

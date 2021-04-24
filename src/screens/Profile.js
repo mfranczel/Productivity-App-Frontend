@@ -1,18 +1,34 @@
 import React, {useEffect, useState} from 'react'
-import { TextInput, View, StyleSheet, Text, Button, TouchableOpacity, Image } from "react-native"
+import { TextInput, View, StyleSheet, Text, Button, TouchableOpacity, Image, ActionSheetIOS } from "react-native"
 import { useSelector, useStore } from 'react-redux'
 import constants from '../constants'
-import * as SecureStore from 'expo-secure-store';
 import DateTimePicker from '@react-native-community/datetimepicker'
+import { Avatar, Accessory} from 'react-native-elements';
+import { Platform } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 
 const Profile = ({ navigation }) => {
 
     const user = useSelector((state) => state.user.currentUser)
-    const [setToken, token] = useState("")
+    const [token, setToken] = useState("")
     const password = useState("")
     const [birthDate, setBirthDate] = useState(new Date(user.birth_date))
+    const [email, setEmail] = useState(user.email)
     const [show, setShow] = useState(false)
+    const tok = useSelector(state => state.user.currentUser.token)
+    const [image, setImage] = useState("")
 
+    useEffect(() => {
+        fetch(constants.BASE_URL + '/pic', {headers: {Authorization: `Bearer ${tok}`}})
+            .then(res => res.blob())
+            .then(res => {
+                var reader = new FileReader()
+                reader.onload = () => {
+                    setImage(reader.result)
+                }
+                reader.readAsDataURL(res)
+            })
+    }, [])
     const onDatePickerChange = (event, selectedDate) => {
         selectedDate = selectedDate || birthDate
         setShow(Platform.OS === 'ios')
@@ -20,26 +36,63 @@ const Profile = ({ navigation }) => {
     }
 
 
-    useEffect(() => {
-        SecureStore.getItemAsync('token')   
-            .then(res => {
-                setToken(res)
-            })
-            .catch(err => {
+    const pickImage = async () => {
+        if (Platform.OS !== 'web') {
+            const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+            if (status !== 'granted') {
+                alert('Sorry, we need camera roll permissions to make this work!');
+                return
+            }
+        }
 
-            })
-    }, [])
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+            //base64: true
+        });
+      
+      
+        if (!result.cancelled) {
+            console.log(result)
+            const formData = new FormData();
+
+            formData.append('img', {
+                name: 'photo.png',
+                mimetype: result.type,
+                type: "image/"+result.uri.split('.').reverse()[0],
+                uri: Platform.OS === "android" ? result.uri : result.uri.replace("file://", "")
+            });
+
+            const options = {
+                method: 'POST',
+                body: formData,
+                headers: {Authorization: `Bearer ${tok}`}
+            };
+
+            await fetch(constants.BASE_URL + '/pic', options)
+        }
+    }
+
+
 
     return (
         <View style={styles.container}>
-            <View style={{backgroundColor: "#FF7575", width: "100%", height: 120}}/>
-            <Image style={{height: 50, width: 50}} source={
-                    { uri: constants.BASE_URL + '/pic/' + user.photo,
-                    headers: {
-                                Authorization: `Bearer ${token}`
-                            }
-                    }}/>
-            <TextInput style={styles.input} placeholder="Email" value={ user.email } onChangeText={ text => setEmail(text) } />
+            <View style={{backgroundColor: "#FF7575", width: "100%", height: 120, justifyContent: "center", alignItems: "center", paddingTop: 100, marginBottom: 75}}>
+                {image !== "" && <Avatar
+                    onPress={() => pickImage()}
+                    size="xlarge"
+                    source={{
+                        uri: image
+                    }}
+                    rounded 
+                    >
+                {/*<Accessory size={30} onPress={() => sendImage()}/>*/}
+                </Avatar>
+                }
+            </View>
+            <TextInput style={styles.input} placeholder="Email" value={ email } onChangeText={ text => setEmail(text) } />
             <TextInput secureTextEntry={true} style={styles.input} placeholder="••••••••••••" value={ password } onChangeText={ text => setPassword(text) } />
             <TouchableOpacity  onPress={() => setShow(true)}>
                 <TextInput style={styles.input} placeholder="04/20/1969" editable={false} value={birthDate.getDate() + "/" + (birthDate.getMonth()+1) + "/" + birthDate.getFullYear()}/>
