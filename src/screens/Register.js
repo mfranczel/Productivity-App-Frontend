@@ -3,9 +3,12 @@ import React, {useState} from 'react'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import UserService from "../services/UserService"
 
+const emailRe = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
 const Register = ({ navigation }) => {
 
     const [email, setEmail] = useState("")
+    const [emailError, setEmailError] = useState("")
     const [password, setPassword] = useState("")
     const [birthDate, setBirthDate] = useState(new Date('1969-04-20'))
     const [show, setShow] = useState(false)
@@ -18,7 +21,9 @@ const Register = ({ navigation }) => {
     }
 
     const handleRegister = () => {
-        UserService.register(email, password, birthDate.toISOString().split('T')[0])
+        var tEmail = email.toLowerCase().trim()
+
+        UserService.register(tEmail, password, birthDate.toISOString().split('T')[0])
             .then((res) => {
                 navigation.goBack()
             })
@@ -27,10 +32,20 @@ const Register = ({ navigation }) => {
             })
     }
 
+    const checkEmail = () => {
+        var tEmail = email.toLowerCase().trim()
+        if (!emailRe.test(tEmail)) {
+            setEmailError("Email is invalid")
+        } else {
+            setEmailError("")
+        }
+    }
+
     return (
         <View style={styles.container}>
             <Text style={styles.header}>To do</Text>
-            <TextInput style={styles.input} placeholder="Email" value={email} onChangeText={ text => setEmail(text)}/>
+            <TextInput style={styles.input} placeholder="Email" value={email} onChangeText={ text => setEmail(text)} onEndEditing={() => checkEmail()}/>
+            <Text style={{width: 260, color: "red" }}>{emailError}</Text>
             <TextInput secureTextEntry={true} style={styles.input} placeholder="Password" value={password} onChangeText={ text => setPassword(text)}/>
             <TouchableOpacity  onPress={() => setShow(true)}>
                 <TextInput style={styles.input} placeholder="04/20/1969" editable={false} value={birthDate.getDate() + "/" + (birthDate.getMonth()+1) + "/" + birthDate.getFullYear()}/>
@@ -74,6 +89,8 @@ const styles = StyleSheet.create({
         height: 40,
         width: 260,
         margin: 10,
+        marginTop: 0,
+        marginBottom: 0,
         borderWidth: 1,
         paddingLeft: 12
     },

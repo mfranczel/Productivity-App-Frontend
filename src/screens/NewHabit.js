@@ -47,13 +47,15 @@ const NewHabit = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
+            <View>
             <Text style={{fontSize: 31, marginBottom: 20, marginLeft: 10}}>Add new habit</Text>
-            <TextInput placeholder="Title" style={styles.input} value={title} onChangeText={text => setTitle(text)}/>
-            <Text style={{marginLeft: 10, marginTop: 10, marginBottom: 10}}>Goal</Text>
-            <ButtonGroup containerStyle={{width: "85%"}} selectedButtonStyle={{backgroundColor: "#959595"}} borderColor={"#959595"} innerBorderStyle={{color: "#959595"}} textStyle={{color: "#959595"}} buttons={buttons} theme={{colors:[]}} selectedIndex={selectedIndex} onPress={updateIndex}/>
-            {selectedIndex === 0 && <Text style={{marginLeft: 10, marginTop: 10, marginBottom: 10}}>(Repeat every day)</Text>}
-            {selectedIndex === 1 && <Text style={{marginLeft: 10, marginTop: 10, marginBottom: 10}}>Times per week</Text>}
-            {selectedIndex === 2 && <Text style={{marginLeft: 10, marginTop: 10, marginBottom: 10}}>Times per month</Text>}
+            <Text style={{marginLeft: 10, marginTop: 10, marginBottom: 2}}>Title:</Text>
+            <TextInput placeholder="New habit" style={styles.input} value={title} onChangeText={text => setTitle(text)}/>
+            <Text style={{marginLeft: 10, marginTop: 10, marginBottom: 2}}>Goal:</Text>
+            <ButtonGroup containerStyle={{width: "85%", marginTop: 0}} selectedButtonStyle={{backgroundColor: "#959595"}} borderColor={"#959595"} innerBorderStyle={{color: "#959595"}} textStyle={{color: "#959595"}} buttons={buttons} theme={{colors:[]}} selectedIndex={selectedIndex} onPress={updateIndex}/>
+            {selectedIndex === 0 && <Text style={{marginLeft: 10, marginTop: 10, marginBottom: 2}}>(Repeat every day)</Text>}
+            {selectedIndex === 1 && <Text style={{marginLeft: 10, marginTop: 10, marginBottom: 2}}>Select days:</Text>}
+            {selectedIndex === 2 && <Text style={{marginLeft: 10, marginTop: 10, marginBottom: 2}}>Times per month:</Text>}
             {(selectedIndex === 1) && (<View style={styles.days}>
                 <TouchableOpacity onPress={() => setWeekDay(0)} style={weekDays[0] === 1 ? styles.daySelected : styles.day}><Text style={{color: weekDays[0] === 1 ? "white" : "#FF5B5B"}}>M</Text></TouchableOpacity>
                 <TouchableOpacity onPress={() => setWeekDay(1)} style={weekDays[1] === 1 ? styles.daySelected : styles.day}><Text style={{color: weekDays[1] === 1 ? "white" : "#FF5B5B"}}>T</Text></TouchableOpacity>
@@ -64,7 +66,7 @@ const NewHabit = ({ navigation }) => {
                 <TouchableOpacity onPress={() => setWeekDay(6)} style={weekDays[6] === 1 ? styles.daySelected : styles.day}><Text style={{color: weekDays[6] === 1 ? "white" : "#FF5B5B"}}>S</Text></TouchableOpacity>
             </View>)}
             {(selectedIndex === 2) && <TextInput style={styles.input} value={numOfDays} onChangeText={(t) => setNumOfDays(t)} />}
-
+            </View>
             <TouchableOpacity style={styles.saveButton} onPress={() => sendHabit()}>
                 <Text style={styles.saveText}>Save</Text>
             </TouchableOpacity>
@@ -75,7 +77,7 @@ const NewHabit = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
       flexDirection: "column",
-      justifyContent: "flex-start",
+      justifyContent: "space-between",
       backgroundColor: '#fff',
       height: "100%",
       paddingTop: 100,
@@ -85,6 +87,7 @@ const styles = StyleSheet.create({
         height: 40,
         width: "85%",
         margin: 10,
+        marginTop: 0,
         borderWidth: 1,
         paddingLeft: 12
     },
@@ -122,10 +125,9 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
         color: "black",
         width: "85%",
-        marginTop: "40%",
         margin: 10,
         height: 40,
-        marginBottom: 15,
+        marginBottom: "70%",
         alignItems: "center"
     },
     saveText: {

@@ -22,7 +22,7 @@ const Home = () => {
 
     return (
         <NavigationContainer>
-            <Stack.Navigator screenOptions={{headerShown: false}}>
+            <Stack.Navigator name="Home" screenOptions={{headerShown: false}}>
                 {
                     isAuth ? (
                         <Stack.Screen name="Tabs" component={Tabs} />

@@ -6,6 +6,9 @@ import DateTimePicker from '@react-native-community/datetimepicker'
 import { Avatar, Accessory} from 'react-native-elements';
 import { Platform } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faLongArrowAltUp, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
+import * as SecureStore from 'expo-secure-store';
 
 const Profile = ({ navigation }) => {
 
@@ -18,7 +21,13 @@ const Profile = ({ navigation }) => {
     const tok = useSelector(state => state.user.currentUser.token)
     const [image, setImage] = useState("")
 
+
+
     useEffect(() => {
+        loadImage()
+    }, [])
+
+    const loadImage = () => {
         fetch(constants.BASE_URL + '/pic', {headers: {Authorization: `Bearer ${tok}`}})
             .then(res => res.blob())
             .then(res => {
@@ -28,7 +37,8 @@ const Profile = ({ navigation }) => {
                 }
                 reader.readAsDataURL(res)
             })
-    }, [])
+    }
+
     const onDatePickerChange = (event, selectedDate) => {
         selectedDate = selectedDate || birthDate
         setShow(Platform.OS === 'ios')
@@ -72,7 +82,17 @@ const Profile = ({ navigation }) => {
             };
 
             await fetch(constants.BASE_URL + '/pic', options)
+            loadImage()
         }
+    }
+
+    const logout = async () => {
+        if (Platform.OS === "web") {
+            localStorage.setItem("token", '')
+        } else {
+            await SecureStore.setItemAsync("token", '')
+        }
+        navigation.dangerouslyGetParent().reset()
     }
 
 
@@ -80,6 +100,9 @@ const Profile = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <View style={{backgroundColor: "#FF7575", width: "100%", height: 120, justifyContent: "center", alignItems: "center", paddingTop: 100, marginBottom: 75}}>
+                <TouchableOpacity onPress={() => logout()}>
+                    <FontAwesomeIcon size={ 32 } style={{color: "white", alignSelf: "flex-start", marginLeft:"85%", width: 50}} icon={faSignOutAlt} />
+                </TouchableOpacity>
                 {image !== "" && <Avatar
                     onPress={() => pickImage()}
                     size="xlarge"
@@ -92,8 +115,11 @@ const Profile = ({ navigation }) => {
                 </Avatar>
                 }
             </View>
-            <TextInput style={styles.input} placeholder="Email" value={ email } onChangeText={ text => setEmail(text) } />
+            <Text style={{width: 260}}>Email:</Text>
+            <TextInput style={styles.input} placeholder="jozko.mrkvicka@jozko.com" value={ email } onChangeText={ text => setEmail(text) } />
+            <Text style={{width: 260}}>Password:</Text>
             <TextInput secureTextEntry={true} style={styles.input} placeholder="••••••••••••" value={ password } onChangeText={ text => setPassword(text) } />
+            <Text style={{width: 260}}>Birthdate:</Text>
             <TouchableOpacity  onPress={() => setShow(true)}>
                 <TextInput style={styles.input} placeholder="04/20/1969" editable={false} value={birthDate.getDate() + "/" + (birthDate.getMonth()+1) + "/" + birthDate.getFullYear()}/>
             </TouchableOpacity>
@@ -124,6 +150,7 @@ const styles = StyleSheet.create({
         height: 40,
         width: 260,
         margin: 10,
+        marginTop: 2,
         borderWidth: 1,
         paddingLeft: 12
     },
