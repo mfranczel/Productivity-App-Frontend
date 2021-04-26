@@ -16,12 +16,10 @@ export default {
             return res.data.token
         } catch(err) {
             if (err.response) {
-                if (err.response.status == 400) {
+                if (err.response.status == 400 || err.response.status == 500) {
                     throw "Bad credentials"
-                } else if (err.response.status == 500){
-                    throw "Server error occured"
                 } else {
-                    throw "Other server error"
+                    throw "Server error"
                 }
             } else {
                 throw "Other error"
@@ -44,6 +42,47 @@ export default {
         }
 
         
+    },
+    deleteProfile: async() => {
+        var token = ""
+        if (Platform.OS !== 'web') {
+            token = await SecureStore.getItemAsync('token');
+        } else {
+            token = localStorage.getItem('token')
+        }
+
+        if (token){
+            try {
+                await axios.delete('/user', {headers: {"Authorization": `Bearer ${token}`}})
+            } catch (e) {
+                throw "Error while deleting profile"
+            }
+        } else {
+            throw "User not signed in"
+        }
+    },
+    changeProfile: async(email, password, birthdate) => {
+        var token = ""
+        if (Platform.OS !== 'web') {
+            token = await SecureStore.getItemAsync('token');
+        } else {
+            token = localStorage.getItem('token')
+        }
+
+        if (token){
+            try {
+                await axios.put('/user', {
+                    email: email,
+                    password: password,
+                    birthDate: birthdate
+                }, {headers: {"Authorization": `Bearer ${token}`}})
+            } catch (e) {
+                throw "Error while changing data"
+            }
+        } else {
+            throw "User not signed in"
+        }
+
     },
     getProfile: async () => {
         var token = ""

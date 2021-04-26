@@ -32,7 +32,7 @@ const userSlice = createSlice({
         logout(state) {
             var newState = {...state}
             newState.isAuth = false
-            newState.currentUser = undefined
+            newState.currentUser = {}
             return newState
         }
     }
@@ -53,6 +53,10 @@ export const login = (email, password) => async (dispatch) => {
     }
 }
 
+export const logout = () => async (dispatch) => {
+    dispatch(userSlice.actions.logout())
+}
+
 
 export const getProfile = () => async (dispatch) => {
     dispatch(userSlice.actions.setLoading(true))
@@ -67,17 +71,29 @@ export const getProfile = () => async (dispatch) => {
     }
 }
 
-/*
-export const setProfile = (profile) => async (dispatch) => {
+
+export const changeProfile = (email, password, birthdate) => async (dispatch) => {
     dispatch(userSlice.actions.setLoading(true))
     try {
-        await UserService.setProfile(profile, token)
-        dispatch(userSlice.actions.setAuthSuccess(profile))
-    } catch (err) {
-        dispatch(userSlice.actions.setAuthFailed(err))
+        await UserService.changeProfile(email, password, birthdate)
+        dispatch(userSlice.actions.setAuthSuccess({email, password, birthdate}))
+    } catch (e) {
+        console.log(e)
     } finally {
         dispatch(userSlice.actions.setLoading(false))
     }
-}*/
+}
+
+export const deleteProfile = () => async (dispatch) => {
+    dispatch(userSlice.actions.setLoading(true))
+    try {
+        await UserService.deleteProfile()
+        dispatch(userSlice.actions.logout())
+    } catch (e) {
+        console.log(e)
+    } finally {
+        dispatch(userSlice.actions.setLoading(false))
+    }
+}
 
 export default userSlice.reducer
