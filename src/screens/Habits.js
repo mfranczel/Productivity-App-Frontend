@@ -26,13 +26,13 @@ const Habit = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <View style={styles.days}>
+                <TouchableOpacity style={currDate === 0 ? styles.daySelected : styles.day}><Text style={{color:"#FF5B5B"}}>S</Text></TouchableOpacity>
                 <TouchableOpacity style={currDate === 1 ? styles.daySelected : styles.day}><Text style={{color:"#FF5B5B"}}>M</Text></TouchableOpacity>
                 <TouchableOpacity style={currDate === 2 ? styles.daySelected : styles.day}><Text style={{color:"#FF5B5B"}}>T</Text></TouchableOpacity>
                 <TouchableOpacity style={currDate === 3 ? styles.daySelected : styles.day}><Text style={{color:"#FF5B5B"}}>W</Text></TouchableOpacity>
                 <TouchableOpacity style={currDate === 4 ? styles.daySelected : styles.day}><Text style={{color:"#FF5B5B"}}>T</Text></TouchableOpacity>
                 <TouchableOpacity style={currDate === 5 ? styles.daySelected : styles.day}><Text style={{color:"#FF5B5B"}}>F</Text></TouchableOpacity>
                 <TouchableOpacity style={currDate === 6 ? styles.daySelected : styles.day}><Text style={{color:"#FF5B5B"}}>S</Text></TouchableOpacity>
-                <TouchableOpacity style={currDate === 7 ? styles.daySelected : styles.day}><Text style={{color:"#FF5B5B"}}>S</Text></TouchableOpacity>
             </View>
             {/*<ScrollView style={{width: "100%"}}>
                 {

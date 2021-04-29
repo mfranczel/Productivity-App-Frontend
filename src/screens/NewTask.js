@@ -24,9 +24,7 @@ const NewTask = ({ navigation }) => {
         } else {
             task.type = "monthly"
         }
-        console.log(task)
         dispatch(addTask(task))
-
         navigation.goBack()
     }
 

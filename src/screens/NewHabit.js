@@ -24,6 +24,8 @@ const NewHabit = ({ navigation }) => {
     }
 
     const sendHabit = () => {
+        
+
         var habit = {text: title}
         if (selectedIndex === 0) {
             habit.type = "daily"
@@ -33,16 +35,18 @@ const NewHabit = ({ navigation }) => {
             var days = []
             for (var i = 0; i < 7; i++) {
                 if (weekDays[i] === 1) {
-                    days.push(i+1)
+                    days.push(i)
                 }
             }
             habit.days = days
+            console.log(weekDays)
+            console.log(days)
         } else {
             habit.type = "monthly"
             habit.days = numOfDays
         }
-        console.log(habit)
         dispatch(addHabit(habit))
+        navigation.goBack()
     }
 
     return (
@@ -57,12 +61,12 @@ const NewHabit = ({ navigation }) => {
             {selectedIndex === 1 && <Text style={{marginLeft: 10, marginTop: 10, marginBottom: 2}}>Select days:</Text>}
             {selectedIndex === 2 && <Text style={{marginLeft: 10, marginTop: 10, marginBottom: 2}}>Times per month:</Text>}
             {(selectedIndex === 1) && (<View style={styles.days}>
-                <TouchableOpacity onPress={() => setWeekDay(0)} style={weekDays[0] === 1 ? styles.daySelected : styles.day}><Text style={{color: weekDays[0] === 1 ? "white" : "#FF5B5B"}}>M</Text></TouchableOpacity>
-                <TouchableOpacity onPress={() => setWeekDay(1)} style={weekDays[1] === 1 ? styles.daySelected : styles.day}><Text style={{color: weekDays[1] === 1 ? "white" : "#FF5B5B"}}>T</Text></TouchableOpacity>
-                <TouchableOpacity onPress={() => setWeekDay(2)} style={weekDays[2] === 1 ? styles.daySelected : styles.day}><Text style={{color: weekDays[2] === 1 ? "white" : "#FF5B5B"}}>W</Text></TouchableOpacity>
-                <TouchableOpacity onPress={() => setWeekDay(3)} style={weekDays[3] === 1 ? styles.daySelected : styles.day}><Text style={{color: weekDays[3] === 1 ? "white" : "#FF5B5B"}}>T</Text></TouchableOpacity>
-                <TouchableOpacity onPress={() => setWeekDay(4)} style={weekDays[4] === 1 ? styles.daySelected : styles.day}><Text style={{color: weekDays[4] === 1 ? "white" : "#FF5B5B"}}>F</Text></TouchableOpacity>
-                <TouchableOpacity onPress={() => setWeekDay(5)} style={weekDays[5] === 1 ? styles.daySelected : styles.day}><Text style={{color: weekDays[5] === 1 ? "white" : "#FF5B5B"}}>S</Text></TouchableOpacity>
+                <TouchableOpacity onPress={() => setWeekDay(0)} style={weekDays[0] === 1 ? styles.daySelected : styles.day}><Text style={{color: weekDays[0] === 1 ? "white" : "#FF5B5B"}}>S</Text></TouchableOpacity>
+                <TouchableOpacity onPress={() => setWeekDay(1)} style={weekDays[1] === 1 ? styles.daySelected : styles.day}><Text style={{color: weekDays[1] === 1 ? "white" : "#FF5B5B"}}>M</Text></TouchableOpacity>
+                <TouchableOpacity onPress={() => setWeekDay(2)} style={weekDays[2] === 1 ? styles.daySelected : styles.day}><Text style={{color: weekDays[2] === 1 ? "white" : "#FF5B5B"}}>T</Text></TouchableOpacity>
+                <TouchableOpacity onPress={() => setWeekDay(3)} style={weekDays[3] === 1 ? styles.daySelected : styles.day}><Text style={{color: weekDays[3] === 1 ? "white" : "#FF5B5B"}}>W</Text></TouchableOpacity>
+                <TouchableOpacity onPress={() => setWeekDay(4)} style={weekDays[4] === 1 ? styles.daySelected : styles.day}><Text style={{color: weekDays[4] === 1 ? "white" : "#FF5B5B"}}>T</Text></TouchableOpacity>
+                <TouchableOpacity onPress={() => setWeekDay(5)} style={weekDays[5] === 1 ? styles.daySelected : styles.day}><Text style={{color: weekDays[5] === 1 ? "white" : "#FF5B5B"}}>F</Text></TouchableOpacity>
                 <TouchableOpacity onPress={() => setWeekDay(6)} style={weekDays[6] === 1 ? styles.daySelected : styles.day}><Text style={{color: weekDays[6] === 1 ? "white" : "#FF5B5B"}}>S</Text></TouchableOpacity>
             </View>)}
             {(selectedIndex === 2) && <TextInput style={styles.input} value={numOfDays} onChangeText={(t) => setNumOfDays(t)} />}
