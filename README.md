@@ -37,7 +37,12 @@ Poznámka: Akceptačné testy sú rozpísané v aise, druhé odovzdanie "Francze
 
 ## Spustenie
 ```console
+npm i
 npm run start
+```
+
+```constants
+zmenit IP adresu
 ```
 
 ## Screenshoots
@@ -63,5 +68,6 @@ Timer running
 ![taskNew](./screens/taskNew.PNG)
 ![todoList](./screens/todoList.PNG)
 ![Timer](./screens/Timer.PNG)
+![Stats](./screens/stats.PNG)
 
 
