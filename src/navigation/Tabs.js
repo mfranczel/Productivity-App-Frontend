@@ -12,7 +12,7 @@ const Tab = createBottomTabNavigator();
 
 const MyTabs = () => {
   return (
-    <Tab.Navigator tabBar={Tabbar}>
+    <Tab.Navigator tabBar={(props) => <Tabbar {...props}/>} tabBarOptions={{keyboardHidesTabBar: true}}>
       <Tab.Screen name="TodoList" component={TodoList} />
       <Tab.Screen name="Habits" component={Habits} />
       <Tab.Screen name="NewTask" component={NewTask} />

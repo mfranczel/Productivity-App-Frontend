@@ -22,7 +22,6 @@ export default {
                     throw "Server error occured"
                 } else {
                     throw "Other error"
-                }
             } else {
                 throw err.message
             }
@@ -45,6 +44,47 @@ export default {
 
         
     },
+    deleteProfile: async() => {
+        var token = ""
+        if (Platform.OS !== 'web') {
+            token = await SecureStore.getItemAsync('token');
+        } else {
+            token = localStorage.getItem('token')
+        }
+
+        if (token){
+            try {
+                await axios.delete('/user', {headers: {"Authorization": `Bearer ${token}`}})
+            } catch (e) {
+                throw "Error while deleting profile"
+            }
+        } else {
+            throw "User not signed in"
+        }
+    },
+    changeProfile: async(email, password, birthdate) => {
+        var token = ""
+        if (Platform.OS !== 'web') {
+            token = await SecureStore.getItemAsync('token');
+        } else {
+            token = localStorage.getItem('token')
+        }
+
+        if (token){
+            try {
+                await axios.put('/user', {
+                    email: email,
+                    password: password,
+                    birthDate: birthdate
+                }, {headers: {"Authorization": `Bearer ${token}`}})
+            } catch (e) {
+                throw "Error while changing data"
+            }
+        } else {
+            throw "User not signed in"
+        }
+
+    },
     getProfile: async () => {
         var token = ""
         if (Platform.OS !== 'web') {
@@ -56,18 +96,17 @@ export default {
         if (token){
             try {
                 var res = await axios.get('/user', {headers: {"Authorization": `Bearer ${token}`}})
-                if (res.status == 200) {
-                    return res.data
-                } else if (res.status == 400) {
-                    throw "Information provided is invalid"
-                } else {
-                    throw "Server error occured"
-                }
+                res.data.token = token
+                return res.data
             } catch (err) {
-                if (err.response.status == 400) {
-                    throw "Token is invalid"
+                if (err.response) {
+                    if (err.response.status === 400) {
+                        throw "Token is invalid"
+                    } else {
+                        throw "Server error occured"
+                    }
                 } else {
-                    throw "Server error occured"
+                    throw "Connection error"
                 }
             }
         } else {

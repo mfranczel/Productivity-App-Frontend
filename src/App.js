@@ -3,6 +3,7 @@ import { Provider} from 'react-redux'
 import getStore from './store'
 import Home from './Home';
 import {registerRootComponent} from 'expo'
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const { store } = getStore()
 
@@ -10,7 +11,9 @@ const App = () => {
 
   return (
     <Provider store={store}>
-      <Home />
+      <SafeAreaProvider>
+        <Home />
+      </SafeAreaProvider>
     </Provider>
   );
 }
