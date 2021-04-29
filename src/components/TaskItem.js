@@ -25,7 +25,7 @@ const TaskItem = (task) => {
          <Text style={styles.itemText}>{task.text.text}</Text>
        </View>
        <TouchableOpacity style={styles.cross} onPress={() => {dispatch(removeTask(task.text.id, task.text.type))}}>
-         <View style={styles.cross} >  x </View>
+         <View style={styles.cross} >  <Text> x </Text> </View>
        </TouchableOpacity>
      </View>
   )
