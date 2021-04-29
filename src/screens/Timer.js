@@ -1,6 +1,9 @@
+import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import React, {useState} from 'react'
-import { TextInput, View, StyleSheet, Text, Button, TouchableOpacity } from "react-native"
-
+import { useEffect } from 'react';
+import { TextInput, View, StyleSheet, Text, Button, TouchableOpacity, Animated } from "react-native"
+import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 
 const Timer = ({ navigation }) => {
 
@@ -15,43 +18,72 @@ const Timer = ({ navigation }) => {
     const [timer, setTimerMinutes] = useState(25);
     const onPressTimerUp = () => setTimerMinutes(prevTimer => prevTimer + 1)
     const onPressTimerDown = () => setTimerMinutes(prevTimer => ((prevTimer -1 < 1) ? 1 : prevTimer - 1))
-    
-    const [timerSeconds, setTimerSeconds] = useState("00");
+
+    const [timerSeconds, setTimerSeconds] = useState(0);
+    const [isTimerPlaying, setTimerPlaying] = useState(false)
+    const [isTimerRunning, setTimerRunning] = useState(false)
+    const [showBreak, setShowBreak] = useState(false)
 
 
     const onPressReset = () => {
         setRounds(1)
         setBreaks(5)
         setTimerMinutes(25)
-        setTimerSeconds("00")
+        setTimerSeconds(0)
+        setTimerRunning(false)
+        setShowBreak(false)
     }
 
     const onPressPause = () => {
-        // pass
+        setTimerPlaying(false)
     }
 
-    var v = null
     const onPressStart = () => {
-        // if (v == null){
-        //     v = startTimer(timer * 60)
-        // }else {
-        //     clearImmediate()
-        // }
+        setRounds(rounds - 1)
+        setTimerRunning(true)
+        setTimerPlaying(true)
     }
 
-    
+    const onPressContinue = () => {
+        setTimerPlaying(true)
+    }
 
+    useEffect(() => {
+        //if (isTimerRunning) {
+            /*var currTimerValue = timer*60
+            timerId = setInterval(() => {
+                if (currTimerValue <= 0) {
+                    clearInterval()
+                } else {
+                    if(isTimerRunning) {
+                        console.log(isTimerRunning)
+                        currTimerValue -= 1
+                    }
+                    setTimerMinutes(Math.floor(currTimerValue/60))
+                    setTimerSeconds(currTimerValue%60)
+                }
+            }, 1000)}*/
+
+        /*if (isTimerRunning) {
+            var currTimerValue = timer*60
+            timer.setInterval("timer", () => {
+                currTimerValue -= 1
+                setTimerMinutes(Math.floor(currTimerValue/60))
+                setTimerSeconds(currTimerValue%60)
+            }, 1000)
+        }*/
+    }, [isTimerRunning])
 
 
     return (
         <View style={styles.container}>
-            
+            {!isTimerRunning ? (<>
             <View style={styles.containerTimer}>
                 <View style={styles.alignLeft}>
-                    <Text style={styles.mainTimer}>{timer}:{timerSeconds}</Text>
+                    <Text style={styles.mainTimer}>{timer}:{timerSeconds < 10 ? "0" + timerSeconds : timerSeconds}</Text>
                     <View>
-                        <TouchableOpacity style={styles.arrowsTimer} onPress={onPressTimerUp}>⮝</TouchableOpacity>
-                        <TouchableOpacity style={styles.arrowsTimer} onPress={onPressTimerDown}>⮟</TouchableOpacity>
+                        <TouchableOpacity style={styles.arrowsTimer} onPress={onPressTimerUp}><FontAwesomeIcon size={32} icon={faAngleUp}/></TouchableOpacity>
+                        <TouchableOpacity style={styles.arrowsTimer} onPress={onPressTimerDown}><FontAwesomeIcon size={32} icon={faAngleDown}/></TouchableOpacity>
                     </View>
                 </View>
             </View>
@@ -60,8 +92,8 @@ const Timer = ({ navigation }) => {
                 <View style={styles.alignLeft}>
                     <Text style={styles.incrementFields}>Breaks: {breaks} min</Text>
                     <View>
-                        <TouchableOpacity style={styles.arrows } onPress={onPressBreaksUp}>⮝</TouchableOpacity>
-                        <TouchableOpacity style={styles.arrows } onPress={onPressBreaksDown}>⮟</TouchableOpacity>
+                        <TouchableOpacity style={styles.arrows } onPress={onPressBreaksUp}><FontAwesomeIcon size={22} icon={faAngleUp}/></TouchableOpacity>
+                        <TouchableOpacity style={styles.arrows } onPress={onPressBreaksDown}><FontAwesomeIcon size={22} icon={faAngleDown}/></TouchableOpacity>
                     </View>
                 </View>
             </View>
@@ -71,23 +103,91 @@ const Timer = ({ navigation }) => {
                 <View style={styles.alignLeft}>
                     <Text style={styles.incrementFields}>Rounds: {rounds}</Text>
                     <View>
-                        <TouchableOpacity style={styles.arrows} onPress={onPressRoundsUp}>⮝</TouchableOpacity>
-                        <TouchableOpacity style={styles.arrows} onPress={onPressRoundsDown}>⮟</TouchableOpacity>
+                        <TouchableOpacity style={styles.arrows} onPress={onPressRoundsUp}><FontAwesomeIcon size={22} icon={faAngleUp}/></TouchableOpacity>
+                        <TouchableOpacity style={styles.arrows} onPress={onPressRoundsDown}><FontAwesomeIcon size={22} icon={faAngleDown}/></TouchableOpacity>
                     </View>
                 </View>
             </View>
+            </>): !showBreak ? (
+                <CountdownCircleTimer
+                key={1}
+                isPlaying={isTimerPlaying}
+                duration={timer*60}
+                onComplete={
+                    () => {
+                        setShowBreak(true)
+                        if (rounds === 0) {
+                            onPressReset()
+                            setTimerRunning(false)
+                            setTimerPlaying(false)
+                        }
+                    }
+                }
+                colors={[
+                  ['#004777', 0.4],
+                  ['#F7B801', 0.4],
+                  ['#A30000', 0.2],
+                ]}
+              >
+            {({ remainingTime, animatedColor }) => (
+                <View>
+                    <Text style={{textAlign:"center", color: "#ff5b5b", fontSize: 25}}> Work! </Text>
+                    <Animated.Text style={{ color: animatedColor, fontSize: 30, textAlign: "center" }}>
+                        {Math.floor(remainingTime / 60) + ":" + (remainingTime%60 < 10 ? "0" + remainingTime%60 : remainingTime%60)}
+                    </Animated.Text>
+                </View>
+            )}
+            </CountdownCircleTimer>
+            ): (
+                <CountdownCircleTimer
+                key={2}
+                isPlaying={isTimerPlaying}
+                duration={breaks*60}
+                onComplete={
+                    () => {
+                        setShowBreak(false)
+                        setRounds(rounds - 1)
+                        
+                    }
+                }
+                colors={[
+                  ['#004777', 0.4],
+                  ['#F7B801', 0.4],
+                  ['#A30000', 0.2],
+                ]}
+              >
+            {({ remainingTime, animatedColor }) => (
+                <View>
+                    <Text style={{textAlign:"center", color: "#B7DDA9", fontSize: 25}}> Free time! </Text>
+                    <Animated.Text style={{ color: animatedColor, fontSize: 30, textAlign: "center" }}>
+                        {Math.floor(remainingTime / 60) + ":" + (remainingTime%60 < 10 ? "0" + remainingTime%60 : remainingTime%60)}
+                    </Animated.Text>
+                </View>
+            )}
+            </CountdownCircleTimer>
+            )}
 
 
             <View>
+                {isTimerRunning && <Text style={{textAlign: "center", width: 260, marginTop: 20, marginBottom: 20}}>Remaining rounds: {rounds}</Text>}
+                {isTimerRunning && !isTimerPlaying ?
+                <TouchableOpacity style={styles.startButton} onPress={onPressContinue}>
+                    <Text style={styles.startText}>Continue</Text>
+                </TouchableOpacity> : isTimerRunning && isTimerPlaying ?
+                <TouchableOpacity style={styles.pauseButton} onPress={onPressPause}>
+                    <Text style={styles.pauseText}>Pause</Text>
+                </TouchableOpacity> : <></>
+                }
+                {!isTimerRunning &&
                 <TouchableOpacity style={styles.startButton} onPress={onPressStart}>
                     <Text style={styles.startText}>Start</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.pauseButton} onPress={onPressPause}>
-                    <Text style={styles.pauseText}>Pause</Text>
-                </TouchableOpacity>
+                }
+                {isTimerRunning &&
                 <TouchableOpacity style={styles.resetButton} onPress={onPressReset}>
                     <Text style={styles.resetText}>Reset</Text>
                 </TouchableOpacity>
+                }
 
             </View>
         </View>
@@ -124,7 +224,7 @@ const styles = StyleSheet.create({
     pauseButton: {
         borderWidth: 1,
         backgroundColor: "white",
-        color: "black",
+        color: "#000000",
         width: 260,
         margin: 10,
         height: 40,

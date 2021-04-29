@@ -24,6 +24,8 @@ const NewHabit = ({ navigation }) => {
     }
 
     const sendHabit = () => {
+        
+
         var habit = {text: title}
         if (selectedIndex === 0) {
             habit.type = "daily"
@@ -41,7 +43,6 @@ const NewHabit = ({ navigation }) => {
             habit.type = "monthly"
             habit.days = numOfDays
         }
-        console.log(habit)
         dispatch(addHabit(habit))
     }
 

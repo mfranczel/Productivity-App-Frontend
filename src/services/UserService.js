@@ -22,6 +22,7 @@ export default {
                     throw "Server error occured"
                 } else {
                     throw "Other error"
+                }
             } else {
                 throw err.message
             }
