@@ -21,7 +21,7 @@ export default {
                 } else if (err.response.status == 500){
                     throw "Server error occured"
                 } else {
-                    throw "Other error"
+                    throw "Other error"}
             } else {
                 throw err.message
             }

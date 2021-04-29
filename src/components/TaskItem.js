@@ -1,6 +1,6 @@
 
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useEffect, useState, useRef} from 'react'
 import { Animated, Text, TouchableOpacity, View, StyleSheet, Dimensions } from 'react-native'
 import { Swipeable } from 'react-native-gesture-handler'
@@ -25,7 +25,7 @@ const TaskItem = (task) => {
          <Text style={styles.itemText}>{task.text.text}</Text>
        </View>
        <TouchableOpacity style={styles.cross} onPress={() => {dispatch(removeTask(task.text.id, task.text.type))}}>
-         <View style={styles.cross} >  <FontAwesomeIcon icon={faTimes}/> </View>
+         <View style={styles.cross} >  x </View>
        </TouchableOpacity>
      </View>
   )
