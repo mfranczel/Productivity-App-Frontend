@@ -41,8 +41,8 @@ npm i
 npm run start
 ```
 
-```constants
-zmenit IP adresu
+```constants.js
+zmenit IP adresu v constants.js
 ```
 
 ## Screenshoots
