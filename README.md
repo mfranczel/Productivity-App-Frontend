@@ -42,3 +42,7 @@ npm run start
 ```
 
 ## Screenshoots
+
+![taskNew](./screens/taskNew.PNG)
+![todoList](./screens/todoList.PNG)
+![Timer](./screens/Timer.PNG)
