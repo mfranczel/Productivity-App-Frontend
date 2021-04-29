@@ -7,7 +7,8 @@ import { removeHabit, completeHabit } from '../slices/habitSlice'
 const HabitItem = ({habit}) => {
     
     const [data, setData] = useState([0,0,0,0,0,0,0])
-    const [dayNames, setDayNames] = useState(['M','T','W','T','F','S','S'])
+    const [streak, setStreak] = useState(0)
+    const [dayNames, setDayNames] = useState(['S','M','T','W','T','F','S'])
     const dispatch = useDispatch()
     const swipeableRef = useRef(null);
 
@@ -21,7 +22,7 @@ const HabitItem = ({habit}) => {
         if (habit.type === "daily") {
             var days = [0,0,0,0,0,0,0]
             var weeklyDays = habit.habit_day_dones.filter(dd => new Date(dd.date) > firstDayOfWeek).map(dd => new Date(dd.date))
-            weeklyDays.forEach(d => days[d.getDay()-1] = 1)
+            weeklyDays.forEach(d => days[d.getDay()] = 1)
             for (var i = 0; i < curr.getDay(); i++) {
                 if (days[i] != 1) {
                     days[i] = -1
@@ -31,12 +32,31 @@ const HabitItem = ({habit}) => {
         } else if (habit.type === "weekly") {
             var days = [0,0,0,0,0,0,0]
             var weeklyDays = habit.habit_day_dones.filter(dd => new Date(dd.date) > firstDayOfWeek).map(dd => new Date(dd.date))
-            weeklyDays.forEach(d => days[d.getDay()-1] = 1)
-            habit.habit_weekday_tbds.forEach((wd) => days[wd.day-1] === 0 ? days[wd.day-1] = -1 : days[wd.day-1] = 1)
+            weeklyDays.forEach(d => days[d.getDay()] = 1)
+            habit.habit_weekday_tbds.forEach((wd) => days[wd.day] === 0 && wd.day <= curr.getDay() ? days[wd.day] = -1 : days[wd.day] === 1 ? days[wd.day] = 1: days[wd.day] = 2)
             setData([...days])
         } else {
-
+            var days = [0,0,0,0,0,0,0]
+            var weeklyDays = habit.habit_day_dones.filter(dd => new Date(dd.date) > firstDayOfWeek).map(dd => new Date(dd.date))
+            weeklyDays.forEach(d => days[d.getDay()] = 1)
+            setData([...days])
         }
+        curr = new Date()
+        var index = habit.habit_day_dones.length - 1
+        setStreak(0)
+        var temp = 0
+        while(index > -1) {
+            if (new Date(habit.habit_day_dones[index].date).getDate() === curr.getDate()) {
+                temp += 1
+                setStreak(temp)
+                curr.setDate(curr.getDate())
+                index -= 1
+            } else {
+                break
+            }
+        }
+
+        console.log(habit.habit_weekday_tbds)
 
     }, [habit])
 
@@ -93,12 +113,12 @@ const HabitItem = ({habit}) => {
             ref={swipeableRef}>
             <View elevation={3} style={style.container}>
                     <Text style={{color: "#FF5B5B", fontSize: 20}}>{habit.text}</Text>
-                    <Text style={{color: "#6A6868", fontSize: 11}}>Streak: 20 days</Text>
+                    <Text style={{color: "#6A6868", fontSize: 11}}>Streak: {streak} days</Text>
                     <View style={style.days}>
                         {   
                                 dayNames.map((d, i) => (
-                                <TouchableOpacity key={i} style={data[i] === 0 ? style.day : data[i] === 1 ? style.dayDone : style.dayNotDone}>
-                                    <Text style={{color: data[i] === 0 ? "#FF5B5B": "white"}}>
+                                <TouchableOpacity key={i} style={data[i] === 0 ? style.day : data[i] === 1 ? style.dayDone : data[i] === 2 ? style.dayToBeDone : style.dayNotDone}>
+                                    <Text style={{color: data[i] === 0 ? "#FF5B5B": data[i] === 2 ? "#B7DDA9": "white"}}>
                                         {d}
                                     </Text>
                                 </TouchableOpacity>)
@@ -147,6 +167,17 @@ const style = StyleSheet.create({
         borderColor: "#B7DDA9",
         backgroundColor: "#B7DDA9",
         color: "white",
+        width: 32,
+        height: 32,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    dayToBeDone: {
+        borderRadius: 50,
+        borderWidth: 1,
+        borderColor: "#B7DDA9",
+        backgroundColor: "white",
+        color: "#B7DDA9",
         width: 32,
         height: 32,
         justifyContent: "center",

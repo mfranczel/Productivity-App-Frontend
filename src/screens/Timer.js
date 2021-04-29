@@ -168,7 +168,7 @@ const Timer = ({ navigation }) => {
             )}
 
 
-            <View>
+            <View style={{width: 260}}>
                 {isTimerRunning && <Text style={{textAlign: "center", width: 260, marginTop: 20, marginBottom: 20}}>Remaining rounds: {rounds}</Text>}
                 {isTimerRunning && !isTimerPlaying ?
                 <TouchableOpacity style={styles.startButton} onPress={onPressContinue}>
@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
       flex: 1,
       backgroundColor: '#fff',
       alignItems: 'center',
-      paddingTop: 220,
+      paddingTop: 150,
       height: "100%"
     },
 
@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
         color: "black",
         width: 260,
-        margin: 10,
+        marginTop: 20,
         height: 40,
         marginBottom: 8,
         alignItems: "center"
