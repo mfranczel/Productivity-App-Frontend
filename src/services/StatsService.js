@@ -3,7 +3,7 @@ import * as SecureStore from 'expo-secure-store';
 import { Platform } from 'react-native';
 
 export default {
-    getStatsDaily: async (path) => { 
+    getStatsDaily: async (selectedIndex) => { 
         var token = ""
         if (Platform.OS !== 'web') {
             token = await SecureStore.getItemAsync('token');
@@ -12,12 +12,17 @@ export default {
         }
         if (token){
             try {
-                // for now it is fixed -- daily
-                var res = await axios.get('/stats/daily', {headers: {"Authorization": `Bearer ${token}`}})
+                if (selectedIndex === 0){
+                    var res = await axios.get('/todo/stats/daily', {headers: {"Authorization": `Bearer ${token}`}})
+                }else if (selectedIndex === 1) {
+                    var res = await axios.get('/todo/stats/weekly', {headers: {"Authorization": `Bearer ${token}`}})
+                }else {
+                    var res = await axios.get('/todo/stats/monthly', {headers: {"Authorization": `Bearer ${token}`}})
+                }
                 return res.data
             } catch(e) {
                 if (e.response) {
-                    if (error.response.status == 500) {
+                    if (e.response.status == 500) {
                         throw "Server error"
                     } else {
                         throw "Unknown error"

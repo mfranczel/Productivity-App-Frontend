@@ -1,27 +1,82 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { TextInput, View, StyleSheet, Text, Button, TouchableOpacity, ScrollView, FlatList } from "react-native"
 import { ButtonGroup } from 'react-native-elements'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector} from 'react-redux'
 import {addTask} from '../slices/taskSlice'
 const buttons = ['Daily', 'Weekly', 'Monthly']
 
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { getStats } from '../slices/statsSlice'
+
+import { PieChart} from "react-native-chart-kit";
+import { Dimensions } from 'react-native'
+
 
 const Tab = createBottomTabNavigator();
 
 const Stats = ({ navigation }) => {
 
+
+    const dispatch = useDispatch()
+    const stats = useSelector(state => state.stats.stats)
+    const loading = useSelector(state => state.stats.loading)
+    const [title, setTitle] = useState("")
     const [selectedIndex, updateIndex] = useState(1)
+
+    const [currDate, setCurrDate] = useState((new Date()).getDay())
+
+
+    const data = [
+        {
+          name: "Not done",
+          population: stats[0],
+          color: "red",
+          legendFontSize: 16
+        },
+        {
+          name: "Doing",
+          population: stats[1],
+          color: "green",
+          legendFontSize: 16
+        },
+        {
+          name: "Done",
+          population: stats[2],
+          color: "blue",
+          legendFontSize: 16
+        },
+      ];
+
+    useEffect(() => {
+        dispatch(getStats(selectedIndex))
+        console.log(stats)
+    }, [selectedIndex])
+    const renderItem = ({item} ) => (
+        <TaskItem task={item} />
+    );
 
     return (
         <View style={styles.container}>
             <ScrollView style={styles.taskWrapper} >
                 <View style={styles.taskWrapper}>
-                    <Text style={styles.sectionTodoTitle}>Stats: not-done/doing/done</Text>
-                    <View style={styles.tasksItem}>
-                        Data here ....
-                    </View>
+                    <Text style={styles.sectionTodoTitle}>Stats: not-done/doing/done {stats}</Text>
+
+                    <PieChart
+                        data={data}
+                        width={Dimensions.get("window").width}
+                        height={220}
+                        chartConfig={{
+                            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                            labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                            style: { borderRadius: 8}}
+                        }
+                        accessor={"population"}
+                        backgroundColor={"transparent"}
+                        paddingLeft={"15"}
+                        center={[8, 8]}
+                        absolute
+                    />
                 </View>
 
                 <ButtonGroup containerStyle={{width: "85%", marginTop: 0}} selectedButtonStyle={{backgroundColor: "#FF5B5B"}} borderColor={"#fff"} innerBorderStyle={{color: "#fff"}} textStyle={{color: "#959595"}} buttons={buttons} theme={{colors:[]}} selectedIndex={selectedIndex} onPress={updateIndex}/>

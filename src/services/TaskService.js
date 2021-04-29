@@ -13,7 +13,13 @@ export default {
         if (token){
             try {
                 // for now it is fixed -- daily
-                var res = await axios.get('/todo/daily', {headers: {"Authorization": `Bearer ${token}`}})
+                if (path === 0){
+                    var res = await axios.get('/todo/daily', {headers: {"Authorization": `Bearer ${token}`}})
+                }else if (path === 1){
+                    var res = await axios.get('/todo/weekly', {headers: {"Authorization": `Bearer ${token}`}})
+                }else{
+                    var res = await axios.get('/todo/monthly', {headers: {"Authorization": `Bearer ${token}`}})
+                }
                 return res.data
             } catch(e) {
                 if (e.response) {
@@ -89,31 +95,31 @@ export default {
     },
     // TODO > this remake for change state with put -TBD
 
-    // completeTask: async (id) => {
-    //     var token = ""
-    //     if (Platform.OS !== 'web') {
-    //         token = await SecureStore.getItemAsync('token');
-    //     } else {
-    //         token = localStorage.getItem('token')
-    //     }
-    //     if (token){ 
-    //         try {
-    //             await axios.post('todo/' + id, {action: "complete"} ,{headers: {"Authorization": `Bearer ${token}`}})
-    //         } catch (e) {
-    //             if (e.response) {
-    //                 if (error.response.status == 500) {
-    //                     throw "Server error"
-    //                 } else {
-    //                     throw "Unknown error"
-    //                 }
-    //             } else if (e.request) {
-    //                 throw "Cannot reach server"
-    //             } else {
-    //                 throw "App error"
-    //             }
-    //         }
-    //     } else {
-    //         throw "User not logged in"
-    //     }
-    // }
+    promoteTask: async (id) => {
+        var token = ""
+        if (Platform.OS !== 'web') {
+            token = await SecureStore.getItemAsync('token');
+        } else {
+            token = localStorage.getItem('token')
+        }
+        if (token){ 
+            try {
+                await axios.put('todo/' + id, {action: "upvote"} ,{headers: {"Authorization": `Bearer ${token}`}})
+            } catch (e) {
+                if (e.response) {
+                    if (e.response.status == 500) {
+                        throw "Server error"
+                    } else {
+                        throw "Unknown error"
+                    }
+                } else if (e.request) {
+                    throw "Cannot reach server"
+                } else {
+                    throw "App error"
+                }
+            }
+        } else {
+            throw "User not logged in"
+        }
+    }
 }

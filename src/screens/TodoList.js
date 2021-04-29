@@ -20,9 +20,15 @@ const TodoList = ({ navigation }) => {
 
     const [currDate, setCurrDate] = useState((new Date()).getDay())
 
+
+
     useEffect(() => {
         dispatch(getTasks())
     }, [])
+
+    useEffect(() => {
+        dispatch(getTasks(selectedIndex))
+    }, [selectedIndex])
 
     useEffect(() => {
         setCurrDate(currDate)
@@ -50,12 +56,12 @@ const TodoList = ({ navigation }) => {
 
             <ScrollView>
                 <View style={styles.taskWrapper}>
-                    <Text style={styles.sectionTodoTitle}>To Do</Text>
+                    <Text style={styles.sectionTodoTitle}>To Do {selectedIndex}</Text>
                     <View style={styles.tasksItem}>
                     <FlatList
                         style={{width: "100%", height: "100%"}}
-                        data={tasks}
-                        onRefresh={() => dispatch(getTasks(0))}
+                        data={tasks.filter(task => task.task_state.state === 0)}
+                        onRefresh={() => dispatch(getTasks(selectedIndex))}
                         renderItem={renderItem}
                         refreshing={loading}
                         extraData={loading}
@@ -67,8 +73,8 @@ const TodoList = ({ navigation }) => {
                     <View style={styles.tasksItem}>
                         <FlatList
                             style={{width: "100%", height: "100%"}}
-                            data={tasks}
-                            onRefresh={() => dispatch(getTasks(1))}
+                            data={tasks.filter(task => task.task_state.state === 1)}
+                            onRefresh={() => dispatch(getTasks(selectedIndex))}
                             renderItem={renderItem}
                             refreshing={loading}
                             extraData={loading}
@@ -80,8 +86,8 @@ const TodoList = ({ navigation }) => {
                     <View style={styles.tasksItem}>
                         <FlatList
                             style={{width: "100%", height: "100%"}}
-                            data={tasks}
-                            onRefresh={() => dispatch(getTasks(2))}
+                            data={tasks.filter(task => task.task_state.state === 2)}
+                            onRefresh={() => dispatch(getTasks(selectedIndex))}
                             renderItem={renderItem}
                             refreshing={loading}
                             extraData={loading}
@@ -110,13 +116,11 @@ const styles = StyleSheet.create({
     tasksItem: {
         marginTop: 20
     },
-
-
     stats: {
         borderWidth: 1,
         backgroundColor: "white",
         color: "black",
-        width: 260,
+        width: 270,
         margin: 10,
         height: 40,
         marginBottom: 8,

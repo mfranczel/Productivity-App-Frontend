@@ -22,6 +22,8 @@ const NewTask = ({ navigation }) => {
         }
         console.log(task)
         dispatch(addTask(task))
+
+        navigation.goBack()
     }
 
     return (
