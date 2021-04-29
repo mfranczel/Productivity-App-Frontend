@@ -26,10 +26,10 @@ const statsSlice = createSlice({
     }
 })
 
-export const getStats = () => async (dispatch) => {
+export const getStats = (selectedIndex) => async (dispatch) => {
     dispatch(statsSlice.actions.setLoading(true))
     try {
-        var stats = await statsSlice.getStats()
+        var stats = await StatsService.getStatsDaily(selectedIndex)
         dispatch(statsSlice.actions.setStats(stats))
     } catch (err) {
         dispatch(statsSlice.actions.setError(err.message))

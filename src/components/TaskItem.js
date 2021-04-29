@@ -1,11 +1,13 @@
 
+import { faTimes } from '@fortawesome/free-solid-svg-icons'
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useEffect, useState, useRef} from 'react'
 import { Animated, Text, TouchableOpacity, View, StyleSheet, Dimensions } from 'react-native'
 import { Swipeable } from 'react-native-gesture-handler'
 
 
 import { useDispatch, useSelector } from 'react-redux'
-import { removeTask } from '../slices/taskSlice'
+import { removeTask, completeTask } from '../slices/taskSlice'
 
 const TaskItem = (task) => {
 
@@ -17,11 +19,13 @@ const TaskItem = (task) => {
   return (
      <View style={styles.container}>
        <View style={styles.alignLeft}>
-         <View style={styles.tapElement}></View>
+         <TouchableOpacity style={styles.cross} onPress={() => {dispatch(completeTask(task.text.id, task.text.type))}}>
+            <View style={styles.tapElement}></View>
+         </TouchableOpacity>
          <Text style={styles.itemText}>{task.text.text}</Text>
        </View>
-       <TouchableOpacity style={styles.cross} onPress={() => {dispatch(removeTask(task.text.id))}}>
-         <View style={styles.cross}>✕</View>
+       <TouchableOpacity style={styles.cross} onPress={() => {dispatch(removeTask(task.text.id, task.text.type))}}>
+         <View style={styles.cross} >  x </View>
        </TouchableOpacity>
      </View>
   )
@@ -38,6 +42,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     borderRadius: 3,
     shadowColor: "#0000ff",
+    minWidth: '90%',
     shadowOffset: {
         width: 2,
         height: -20,

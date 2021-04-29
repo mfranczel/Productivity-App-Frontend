@@ -20,9 +20,15 @@ const TodoList = ({ navigation }) => {
 
     const [currDate, setCurrDate] = useState((new Date()).getDay())
 
+
+
     useEffect(() => {
         dispatch(getTasks())
     }, [])
+
+    useEffect(() => {
+        dispatch(getTasks(selectedIndex))
+    }, [selectedIndex])
 
     useEffect(() => {
         setCurrDate(currDate)
@@ -38,6 +44,7 @@ const TodoList = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
+            <ScrollView>
             <ButtonGroup containerStyle={{width: "85%", marginTop: 0}} selectedButtonStyle={{backgroundColor: "#FF5B5B"}} borderColor={"#fff"} innerBorderStyle={{color: "#fff"}} textStyle={{color: "#959595"}} buttons={buttons} theme={{colors:[]}} selectedIndex={selectedIndex} onPress={updateIndex}/>
             {selectedIndex === 0 && <Text style={{marginLeft: 10, marginTop: 10, marginBottom: 2}}>(Repeat every day)</Text>}
             {selectedIndex === 1 && <Text style={{marginLeft: 10, marginTop: 10, marginBottom: 2}}>(Reapeat once a week)</Text>}
@@ -47,41 +54,39 @@ const TodoList = ({ navigation }) => {
                     <Text style={styles.statsText}>Stats</Text>
             </TouchableOpacity>
 
-
-            <ScrollView>
+                <Text style={styles.sectionTodoTitle}>To Do</Text>
                 <View style={styles.taskWrapper}>
-                    <Text style={styles.sectionTodoTitle}>To Do</Text>
                     <View style={styles.tasksItem}>
                     <FlatList
                         style={{width: "100%", height: "100%"}}
-                        data={tasks}
-                        onRefresh={() => dispatch(getTasks(0))}
+                        data={tasks.filter(task => task.task_state.state === 0)}
+                        onRefresh={() => dispatch(getTasks(selectedIndex))}
                         renderItem={renderItem}
                         refreshing={loading}
                         extraData={loading}
                         keyExtractor={task => task.id + ""}/>
                     </View>
                 </View>
+                <Text style={styles.sectionTodoTitle}>Doing</Text>
                 <View style={styles.taskWrapper}>
-                    <Text style={styles.sectionTodoTitle}>Doing</Text>
                     <View style={styles.tasksItem}>
                         <FlatList
                             style={{width: "100%", height: "100%"}}
-                            data={tasks}
-                            onRefresh={() => dispatch(getTasks(1))}
+                            data={tasks.filter(task => task.task_state.state === 1)}
+                            onRefresh={() => dispatch(getTasks(selectedIndex))}
                             renderItem={renderItem}
                             refreshing={loading}
                             extraData={loading}
                             keyExtractor={task => task.id + ""}/>
                     </View>
                 </View>
+                <Text style={styles.sectionTodoTitle}>Done</Text>
                 <View style={styles.taskWrapper}>
-                    <Text style={styles.sectionTodoTitle}>Done</Text>
                     <View style={styles.tasksItem}>
                         <FlatList
                             style={{width: "100%", height: "100%"}}
-                            data={tasks}
-                            onRefresh={() => dispatch(getTasks(2))}
+                            data={tasks.filter(task => task.task_state.state === 2)}
+                            onRefresh={() => dispatch(getTasks(selectedIndex))}
                             renderItem={renderItem}
                             refreshing={loading}
                             extraData={loading}
@@ -106,21 +111,21 @@ const styles = StyleSheet.create({
     sectionTodoTitle: {
         fontWeight: 'bold',
         fontSize: 20,
+        width:270
     },
     tasksItem: {
-        marginTop: 20
+        marginTop: 20,
+        width:260
     },
-
-
     stats: {
         borderWidth: 1,
         backgroundColor: "white",
         color: "black",
-        width: 260,
+        width: 270,
         margin: 10,
         height: 40,
         marginBottom: 8,
-        alignItems: "center",
+        alignItems: 'center',
     },
     statsText: {
         marginTop: "auto",

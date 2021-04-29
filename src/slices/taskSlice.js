@@ -28,10 +28,10 @@ const taskSlice = createSlice({
     }
 })
 
-export const getTasks = () => async (dispatch) => {
+export const getTasks = (selectedIndex) => async (dispatch) => {
     dispatch(taskSlice.actions.setLoading(true))
     try {
-        var tasks = await TaskService.getTasks(0)
+        var tasks = await TaskService.getTasks(selectedIndex)
         dispatch(taskSlice.actions.setTasks(tasks))
     } catch (err) {
         dispatch(taskSlice.actions.setError(err.message))
@@ -92,11 +92,20 @@ export const addTask = (task) => async (dispatch) => {
 }
 
 // 
-export const removeTask = (id) => async (dispatch) => {
+export const removeTask = (id, seletcIndex) => async (dispatch) => {
     dispatch(taskSlice.actions.setLoading(true))
     try {
+
+        if (seletcIndex === 'daily'){
+            seletcIndex = 0
+        } else if (seletcIndex === 'weekly') {
+            seletcIndex = 1
+        } else {
+            seletcIndex = 2
+        }
+
         await TaskService.removeTask(id)
-        var tasks = await TaskService.getTasks()
+        var tasks = await TaskService.getTasks(seletcIndex)
         dispatch(taskSlice.actions.setTasks(tasks))
     } catch (err) {
         dispatch(taskSlice.actions.setError(err.message))
@@ -105,18 +114,24 @@ export const removeTask = (id) => async (dispatch) => {
     }
 }
 
-// export const completeHabit = (id) => async (dispatch) => {
-//     dispatch(habitSlice.actions.setLoading(true))
-//     try {
-//         await HabitService.completeHabit(id)
-//         var habits = await HabitService.getHabits()
-//         dispatch(habitSlice.actions.setHabits(habits))
-//     } catch (err) {
-//         dispatch(habitSlice.actions.setError(err.message))
-//     } finally {
-//         dispatch(habitSlice.actions.setLoading(false))
-//     }
-// }
-
+export const completeTask = (id, seletcIndex) => async (dispatch) => {
+    dispatch(taskSlice.actions.setLoading(true))
+    try {
+        if (seletcIndex === 'daily'){
+            seletcIndex = 0
+        } else if (seletcIndex === 'weekly') {
+            seletcIndex = 1
+        } else {
+            seletcIndex = 2
+        }
+        await TaskService.promoteTask(id)
+        var tasks = await TaskService.getTasks(seletcIndex)
+        dispatch(taskSlice.actions.setTasks(tasks))
+    } catch (err) {
+        dispatch(taskSlice.actions.setError(err.message))
+    } finally {
+        dispatch(taskSlice.actions.setLoading(false))
+    }
+}
 
 export default taskSlice.reducer

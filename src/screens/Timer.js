@@ -24,6 +24,11 @@ const Timer = ({ navigation }) => {
     const [isTimerRunning, setTimerRunning] = useState(false)
     const [showBreak, setShowBreak] = useState(false)
 
+    function startTimer (duration){
+
+        
+    }
+
 
     const onPressReset = () => {
         setRounds(1)
@@ -48,31 +53,7 @@ const Timer = ({ navigation }) => {
         setTimerPlaying(true)
     }
 
-    useEffect(() => {
-        //if (isTimerRunning) {
-            /*var currTimerValue = timer*60
-            timerId = setInterval(() => {
-                if (currTimerValue <= 0) {
-                    clearInterval()
-                } else {
-                    if(isTimerRunning) {
-                        console.log(isTimerRunning)
-                        currTimerValue -= 1
-                    }
-                    setTimerMinutes(Math.floor(currTimerValue/60))
-                    setTimerSeconds(currTimerValue%60)
-                }
-            }, 1000)}*/
 
-        /*if (isTimerRunning) {
-            var currTimerValue = timer*60
-            timer.setInterval("timer", () => {
-                currTimerValue -= 1
-                setTimerMinutes(Math.floor(currTimerValue/60))
-                setTimerSeconds(currTimerValue%60)
-            }, 1000)
-        }*/
-    }, [isTimerRunning])
 
 
     return (
