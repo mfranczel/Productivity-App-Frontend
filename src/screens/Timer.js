@@ -207,7 +207,6 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
         color: "#000000",
         width: 260,
-        margin: 10,
         height: 40,
         marginBottom: 8,
         alignItems: "center"
@@ -223,7 +222,6 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
         color: "black",
         width: 260,
-        margin: 10,
         height: 40,
         marginBottom: 8,
         alignItems: "center"

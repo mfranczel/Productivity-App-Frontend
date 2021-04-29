@@ -39,6 +39,7 @@ const Habit = ({ navigation }) => {
                     habits.map(habit => <HabitItem habit={habit}/>)
                 }
             </ScrollView>*/}
+            { habits.length != 0 ?
             <FlatList
                 style={{width: "100%", height: "100%"}}
                 data={habits}
@@ -47,7 +48,7 @@ const Habit = ({ navigation }) => {
                 refreshing={loading}
                 extraData={loading}
                 keyExtractor={habit => habit.id + ""}
-            />
+            /> : <Text style={{marginTop: "auto", marginBottom: "auto", color: "grey"}}>Keine Gewohnheiten zu sehen.</Text>}
         </View>
     )
 }
