@@ -1,8 +1,5 @@
 # Frontend for Productivity App
 
-- State management with Redux & Redux Thunk
-
-
  Productivity-App sa skladá z frontendu a backendu. Aplikácia má slúžiť ako pomocník, ktorý zvýši vašu produktivitu!
  Do aoplikácie sa používateľ __registruje__ a __prihlási__. Po prihlásení bude môcť používateľ vykonávať nasledovné akcie: 
  - pridávať, mazať a pozmeňovať stav "taskov"/úloh (2 obrazovky)
@@ -12,6 +9,7 @@
 Aplikácia poskytuje úkony vytvorenia (e.g. "post task"), zobrazenia ("get tasks"), upravenia (zmeň stav tasku), a mazania dát (zmaž "task").
 Tieto úkony sú demonštrované vo viacerích prípadoch. 
 
+Aplikácia je vytvorená v react-native, pričom je používaný token na autentizáciu a redux + redux thunk + redux toolkit na state management.
 
 Poznámka: Dokumentácia k backendu, je odovzdaná samostatne. Link na backend Github je v kapitole "Links". Samotná pozostáva z viacerých odovzdaní do študentského portálu AIS, preto tu nie sú vyobrazené návrhy, end pointy, a testy, hoc sú spomínané.
 
