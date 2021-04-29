@@ -26,6 +26,7 @@ Figma link: https://www.figma.com/file/3mQ06X0TIL0YV9JzjN36n0/MTAA?node-id=0%3A1
 
 ## Zmeny oproti návrhu
 - použitie "koláčového" grafu namiesto stĺpcového grafu, viacej sa nám hodí pre prehľadnejšie zobrazenie dát
+- zmena vytvorenia nového "habitu" - denný sa má robiť každý deň, týždenný počas vybraných dní a mesačný počas určitého vybraného počtu dní
 
 ### Akceptačné testy frontendu
 - Test 1: Registrácia a prihlásenie používateľa - PASSED
