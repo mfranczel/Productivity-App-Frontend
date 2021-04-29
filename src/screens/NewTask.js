@@ -12,6 +12,10 @@ const NewTask = ({ navigation }) => {
     const dispatch = useDispatch()
 
     const sendTask = () => {
+        if (title === ""){
+            return
+        }
+
         var task = {text: title}
         if (selectedIndex === 0) {
             task.type = "daily"
