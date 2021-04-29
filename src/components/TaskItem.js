@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     borderRadius: 3,
     shadowColor: "#0000ff",
+    minWidth: '90%',
     shadowOffset: {
         width: 2,
         height: -20,

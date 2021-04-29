@@ -55,18 +55,20 @@ const Stats = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <ScrollView style={styles.taskWrapper} >
+            <ScrollView>
                 <View style={styles.taskWrapper}>
-                    <Text style={styles.sectionTodoTitle}>Stats: not-done/doing/done {stats}</Text>
+                <View style={styles.wrapper}>
+                    <Text style={styles.sectionTodoTitle}>Stats: not-done/doing/done</Text>
+                
 
                     <PieChart
                         data={data}
-                        width={Dimensions.get("window").width}
-                        height={220}
+                        width={270}
+                        height={160}
                         chartConfig={{
                             color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                             labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                            style: { borderRadius: 8}}
+                            style: { borderRadius: 1}}
                         }
                         accessor={"population"}
                         backgroundColor={"transparent"}
@@ -76,7 +78,7 @@ const Stats = ({ navigation }) => {
                     />
 
 
-                <ButtonGroup containerStyle={{width: "85%", marginTop: 0}} selectedButtonStyle={{backgroundColor: "#FF5B5B"}} borderColor={"#fff"} innerBorderStyle={{color: "#fff"}} textStyle={{color: "#959595"}} alignItems= {"center"} buttons={buttons} theme={{colors:[]}} selectedIndex={selectedIndex} onPress={updateIndex}/>
+                <ButtonGroup containerStyle={{width: "270", marginTop: 0}} selectedButtonStyle={{backgroundColor: "#FF5B5B"}} borderColor={"#fff"} innerBorderStyle={{color: "#fff"}} textStyle={{color: "#959595"}} alignItems= {"center"} buttons={buttons} theme={{colors:[]}} selectedIndex={selectedIndex} onPress={updateIndex}/>
                 {selectedIndex === 0 && <Text style={{marginLeft: 10, marginTop: 10, marginBottom: 2}}>(Repeat every day)</Text>}
                 {selectedIndex === 1 && <Text style={{marginLeft: 10, marginTop: 10, marginBottom: 2}}>(Reapeat once a week)</Text>}
                 {selectedIndex === 2 && <Text style={{marginLeft: 10, marginTop: 10, marginBottom: 2}}>(Repeat once a month)</Text>}
@@ -84,7 +86,7 @@ const Stats = ({ navigation }) => {
                 <TouchableOpacity style={styles.stats} onPress={() => {navigation.navigate("Tabs")}}>
                     <Text style={styles.statsText}>Back</Text>
                 </TouchableOpacity>
-                </View>
+                </View></View>
                 
             </ScrollView>
 
@@ -111,6 +113,10 @@ const styles = StyleSheet.create({
     },
     tasksWrapper: {
         alignItems: 'center',
+    },
+
+    wrapper: {
+        width: 270,
     },
     stats: {
         borderWidth: 1,

@@ -28,7 +28,8 @@ const NewTask = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <View>
+            <View style={styles.wrapper}> 
+            <View style={styles.wrapperwidth}> 
             <Text style={{fontSize: 31, marginBottom: 20, marginLeft: 10}}>Add new task</Text>
             <Text style={{marginLeft: 10, marginTop: 10, marginBottom: 2}}>Title:</Text>
             <TextInput placeholder="New task" style={styles.input} value={title} onChangeText={text => setTitle(text)}/>
@@ -38,10 +39,11 @@ const NewTask = ({ navigation }) => {
             {selectedIndex === 0 && <Text style={{marginLeft: 10, marginTop: 10, marginBottom: 2}}>(Repeat every day)</Text>}
             {selectedIndex === 1 && <Text style={{marginLeft: 10, marginTop: 10, marginBottom: 2}}>(Reapeat once a week)</Text>}
             {selectedIndex === 2 && <Text style={{marginLeft: 10, marginTop: 10, marginBottom: 2}}>(Repeat once a month)</Text>}
-            </View>
             <TouchableOpacity style={styles.saveButton} onPress={() => sendTask()}>
                 <Text style={styles.saveText}>Save</Text>
             </TouchableOpacity>
+            </View> 
+            </View> 
         </View>
     )
 }
@@ -53,7 +55,15 @@ const styles = StyleSheet.create({
       backgroundColor: '#fff',
       height: "100%",
       paddingTop: 100,
-      paddingLeft: 20
+      paddingLeft: 20,
+    },
+
+    wrapper: {
+        alignItems: "center"
+    },
+
+    wrapperwidth: {
+        width:270
     },
     input: {
         height: 40,
@@ -62,34 +72,6 @@ const styles = StyleSheet.create({
         marginTop: 0,
         borderWidth: 1,
         paddingLeft: 12
-    },
-    days: {
-        flexDirection: "row",
-        width: "85%",
-        marginLeft: 10,
-        marginTop: 10,
-        height: 50,
-        justifyContent: "space-between",
-    },
-    day: {
-        borderRadius: 50,
-        borderWidth: 1,
-        borderColor: "#FF5B5B",
-        width: 32,
-        height: 32,
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    daySelected: {
-        borderRadius: 50,
-        borderWidth: 1,
-        borderColor: "#B7DDA9",
-        backgroundColor: "#B7DDA9",
-        color: "white",
-        width: 32,
-        height: 32,
-        justifyContent: "center",
-        alignItems: "center",
     },
     saveButton: {
         borderWidth: 1,
