@@ -1,29 +1,53 @@
-import React, {useState} from 'react'
-import { TextInput, View, StyleSheet, Text, Button, TouchableOpacity, ScrollView } from "react-native"
+import React, {useEffect, useState} from 'react'
+import { TextInput, View, StyleSheet, Text, Button, TouchableOpacity, ScrollView, FlatList } from "react-native"
+import { useDispatch, useSelector } from 'react-redux'
 import HabitItem from '../components/HabitItem'
+import { getHabits } from '../slices/habitSlice'
 
 const Habit = ({ navigation }) => {
+
+    const dispatch = useDispatch()
+    const habits = useSelector(state => state.habits.habits)
+    const [currDate, setCurrDate] = useState((new Date()).getDay())
+    const loading = useSelector(state => state.habits.loading)
+
+    useEffect(() => {
+        dispatch(getHabits())
+    }, [])
+
+    useEffect(() => {
+        setCurrDate(currDate)
+    })
+
+    const renderItem = ({item} ) => (
+        <HabitItem habit={item} />
+    );
+
     return (
         <View style={styles.container}>
             <View style={styles.days}>
-                <TouchableOpacity style={styles.daySelected}><Text style={{color:"#FF5B5B"}}>M</Text></TouchableOpacity>
-                <TouchableOpacity style={styles.day} ><Text style={{color:"#FF5B5B"}}>T</Text></TouchableOpacity>
-                <TouchableOpacity style={styles.day}><Text style={{color:"#FF5B5B"}}>W</Text></TouchableOpacity>
-                <TouchableOpacity style={styles.day}><Text style={{color:"#FF5B5B"}}>T</Text></TouchableOpacity>
-                <TouchableOpacity style={styles.day}><Text style={{color:"#FF5B5B"}}>F</Text></TouchableOpacity>
-                <TouchableOpacity style={styles.day}><Text style={{color:"#FF5B5B"}}>S</Text></TouchableOpacity>
-                <TouchableOpacity style={styles.day}><Text style={{color:"#FF5B5B"}}>S</Text></TouchableOpacity>
+                <TouchableOpacity style={currDate === 1 ? styles.daySelected : styles.day}><Text style={{color:"#FF5B5B"}}>M</Text></TouchableOpacity>
+                <TouchableOpacity style={currDate === 2 ? styles.daySelected : styles.day}><Text style={{color:"#FF5B5B"}}>T</Text></TouchableOpacity>
+                <TouchableOpacity style={currDate === 3 ? styles.daySelected : styles.day}><Text style={{color:"#FF5B5B"}}>W</Text></TouchableOpacity>
+                <TouchableOpacity style={currDate === 4 ? styles.daySelected : styles.day}><Text style={{color:"#FF5B5B"}}>T</Text></TouchableOpacity>
+                <TouchableOpacity style={currDate === 5 ? styles.daySelected : styles.day}><Text style={{color:"#FF5B5B"}}>F</Text></TouchableOpacity>
+                <TouchableOpacity style={currDate === 6 ? styles.daySelected : styles.day}><Text style={{color:"#FF5B5B"}}>S</Text></TouchableOpacity>
+                <TouchableOpacity style={currDate === 7 ? styles.daySelected : styles.day}><Text style={{color:"#FF5B5B"}}>S</Text></TouchableOpacity>
             </View>
-            <ScrollView>
-                <HabitItem />
-                <HabitItem />
-                <HabitItem />
-                <HabitItem />
-                <HabitItem />
-                <HabitItem />
-                <HabitItem />
-                <HabitItem />
-            </ScrollView>
+            {/*<ScrollView style={{width: "100%"}}>
+                {
+                    habits.map(habit => <HabitItem habit={habit}/>)
+                }
+            </ScrollView>*/}
+            <FlatList
+                style={{width: "100%", height: "100%"}}
+                data={habits}
+                onRefresh={() => dispatch(getHabits())}
+                renderItem={renderItem}
+                refreshing={loading}
+                extraData={loading}
+                keyExtractor={habit => habit.id + ""}
+            />
         </View>
     )
 }

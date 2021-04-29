@@ -17,7 +17,7 @@ const Login = ({ navigation }) => {
     }, [])
 
     const onLoginButtonClick = () => {
-        dispatch(login(email, password))
+        dispatch(login(email.trim(), password))
     }
 
     return (
@@ -25,7 +25,7 @@ const Login = ({ navigation }) => {
             <Text style={styles.header}>To do</Text>
             <TextInput style={styles.input} placeholder="Email" value={ email } onChangeText={ text => setEmail(text) } />
             <TextInput secureTextEntry={true} style={styles.input} placeholder="Password" value={ password } onChangeText={ text => setPassword(text) } />
-            <Text style={{width: 260, textAlign: "center"}}>{isAuth ? "Logged in! " : error.message}</Text>
+            <Text style={{width: 260, textAlign: "center"}}>{isAuth ? "Logged in! " : (error.message !== "User not signed in" && error.message !== "Server error occured" ? error.message: "")}</Text>
             <TouchableOpacity style={styles.loginButton} onPress={() => onLoginButtonClick()}>
                 <Text style={styles.loginText}>Login</Text>
             </TouchableOpacity>

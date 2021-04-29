@@ -1,65 +1,121 @@
-import React, { useState } from 'react'
-import { Text, TouchableOpacity, View, StyleSheet, Dimensions, Animated } from 'react-native'
-import { SwipeListView, SwipeRow } from 'react-native-swipe-list-view'
+import React, { useEffect, useState, useRef} from 'react'
+import { Animated, Text, TouchableOpacity, View, StyleSheet, Dimensions } from 'react-native'
+import { Swipeable } from 'react-native-gesture-handler'
+import { useDispatch, useSelector } from 'react-redux'
+import { removeHabit, completeHabit } from '../slices/habitSlice'
 
-const HabitItem = () => {
+const HabitItem = ({habit}) => {
     
-    const data = useState([1,2,3,4,5,6])
+    const [data, setData] = useState([0,0,0,0,0,0,0])
+    const [dayNames, setDayNames] = useState(['M','T','W','T','F','S','S'])
+    const dispatch = useDispatch()
+    const swipeableRef = useRef(null);
 
-    const onSwipeValueChange = swipeData => {
-        const { key, value } = swipeData;
-        if (
-            value < -Dimensions.get('window').width &&
-            !animationIsRunning.current
-        ) {
-            animationIsRunning.current = true;
-            Animated.timing(rowTranslateAnimatedValues[key], {
-                toValue: 0,
-                duration: 200,
-                useNativeDriver: false,
-            }).start(() => {
-                const newData = [...listData];
-                const prevIndex = listData.findIndex(item => item.key === key);
-                newData.splice(prevIndex, 1);
-                setListData(newData);
-                animationIsRunning.current = false;
-            });
+    useEffect(() => {
+        var curr = new Date()
+        var firstDayOfWeek = new Date(curr.setDate(curr.getDate() - curr.getDay()))
+        var lastDayOfWeek = new Date(curr.setDate(firstDayOfWeek + 6))
+
+        curr = new Date()
+
+        if (habit.type === "daily") {
+            var days = [0,0,0,0,0,0,0]
+            var weeklyDays = habit.habit_day_dones.filter(dd => new Date(dd.date) > firstDayOfWeek).map(dd => new Date(dd.date))
+            weeklyDays.forEach(d => days[d.getDay()-1] = 1)
+            for (var i = 0; i < curr.getDay(); i++) {
+                if (days[i] != 1) {
+                    days[i] = -1
+                }
+            }
+            setData([...days])
+        } else if (habit.type === "weekly") {
+            var days = [0,0,0,0,0,0,0]
+            var weeklyDays = habit.habit_day_dones.filter(dd => new Date(dd.date) > firstDayOfWeek).map(dd => new Date(dd.date))
+            weeklyDays.forEach(d => days[d.getDay()-1] = 1)
+            habit.habit_weekday_tbds.forEach((wd) => days[wd.day-1] === 0 ? days[wd.day-1] = -1 : days[wd.day-1] = 1)
+            setData([...days])
+        } else {
+
         }
-    };
 
+    }, [habit])
 
-    const renderHiddenItem = () => (
-        <View style={style.rowBack}>
-            <View style={[style.backRightBtn, style.backRightBtnRight]}>
-                <Text style={style.backTextWhite}>Delete</Text>
+    const rightAction = (progress, dragX) => {
+        return (
+            <View style={{backgroundColor: "#B7DDA9", height: 130, width: "30%", marginLeft: -8}}>
+                <TouchableOpacity onPress={() => {dispatch(completeHabit(habit.id)); swipeableRef.current.close()}} style={{flexDirection: "column", justifyContent: "center", height: "100%", width: "100%", alignItems: "flex-end"}}>
+                    <Animated.Text style={[
+                        {
+                        height: 20,
+                        color: "white",
+                        marginRight: "15%",
+                        },
+                    ]}>
+                        Complete
+                    </Animated.Text>
+                </TouchableOpacity>
             </View>
-        </View>
-    );
+        )
+    }
+
+    const leftAction = (progress, dragX) => {
+        const trans = dragX.interpolate({
+            inputRange: [0, 50, 100, 101],
+            outputRange: [-20, 0, 0, 1],
+          });
+        return (
+            <View style={{backgroundColor: "#FF5B5B", height: 130, width: "30%", marginRight: -8}}>
+                <TouchableOpacity onPress={() => {dispatch(removeHabit(habit.id)); swipeableRef.current.close()}} style={{flexDirection: "column", justifyContent: "center", height: "100%", width: "100%"}}>
+                    <Animated.Text style={[
+                        {
+                        //transform: [{ translateX: trans }],
+                        height: 20,
+                        marginLeft: "15%",
+                        color: "white"
+                        },
+                    ]}>
+                        Delete
+                    </Animated.Text>
+                </TouchableOpacity>
+            </View>
+        )
+    }
+
 
     return (
-        <View elevation={2} style={style.container}>
-                <Text style={{color: "#FF5B5B", fontSize: 20}}>Talking to plants</Text>
-                <Text style={{color: "#6A6868", fontSize: 11}}>Streak: 20 days</Text>
-                <View style={style.days}>
-                    <TouchableOpacity style={style.dayDone}><Text style={{color:"white"}}>M</Text></TouchableOpacity>
-                    <TouchableOpacity style={style.dayNotDone}><Text style={{color:"white"}}>T</Text></TouchableOpacity>
-                    <TouchableOpacity style={style.day}><Text style={{color:"#FF5B5B"}}>W</Text></TouchableOpacity>
-                    <TouchableOpacity style={style.day}><Text style={{color:"#FF5B5B"}}>T</Text></TouchableOpacity>
-                    <TouchableOpacity style={style.day}><Text style={{color:"#FF5B5B"}}>F</Text></TouchableOpacity>
-                    <TouchableOpacity style={style.day}><Text style={{color:"#FF5B5B"}}>S</Text></TouchableOpacity>
-                    <TouchableOpacity style={style.day}><Text style={{color:"#FF5B5B"}}>S</Text></TouchableOpacity>
-                </View>
-        </View>
+        <Swipeable 
+            overshootLeft={false} 
+            overshootRight={false} 
+            renderLeftActions={leftAction} 
+            onSwipeableLeftOpen={() => {}}
+            renderRightActions={rightAction} 
+            onSwipeableLeftOpen={() => {}}
+            ref={swipeableRef}>
+            <View elevation={3} style={style.container}>
+                    <Text style={{color: "#FF5B5B", fontSize: 20}}>{habit.text}</Text>
+                    <Text style={{color: "#6A6868", fontSize: 11}}>Streak: 20 days</Text>
+                    <View style={style.days}>
+                        {   
+                                dayNames.map((d, i) => (
+                                <TouchableOpacity key={i} style={data[i] === 0 ? style.day : data[i] === 1 ? style.dayDone : style.dayNotDone}>
+                                    <Text style={{color: data[i] === 0 ? "#FF5B5B": "white"}}>
+                                        {d}
+                                    </Text>
+                                </TouchableOpacity>)
+                            )
+                        }
+                    </View>
+            </View>
+        </Swipeable>
     )
 }
 const style = StyleSheet.create({
     container: {
-        zIndex: 2,
-        width: "95%",
+        backgroundColor: "white",
         height: 130,
         padding:15,
-        marginLeft: "auto",
-        marginRight: "auto",
+        marginLeft: 5,
+        marginRight: 5,
         marginBottom: 10,
         borderRadius: 3,
         shadowColor: "#0000ff",

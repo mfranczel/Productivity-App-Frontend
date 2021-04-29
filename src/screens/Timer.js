@@ -18,6 +18,32 @@ const Timer = ({ navigation }) => {
     
     const [timerSeconds, setTimerSeconds] = useState("00");
 
+    function startTimer (duration){
+        var start = Date.now(),
+            diff,
+            minutes,
+            seconds, t;
+        
+        function timer() {
+            diff = duration - (((Date.now() - start) / 1000) | 0);    
+            minutes = (diff / 60) | 0;
+            seconds = (diff % 60) | 0;
+
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+
+            setTimerMinutes(minutes)
+            setTimerSeconds(seconds)
+            
+            if (diff <= 0) {
+                start = Date.now() + 1000;
+            }
+        };
+        timer();
+        setInterval(timer, 1000);
+        
+    }
+
 
     const onPressReset = () => {
         setRounds(1)
@@ -27,19 +53,17 @@ const Timer = ({ navigation }) => {
     }
 
     const onPressPause = () => {
-        // pass
+        // clearInterval()
     }
 
     var v = null
     const onPressStart = () => {
-        // if (v == null){
-        //     v = startTimer(timer * 60)
-        // }else {
-        //     clearImmediate()
-        // }
+        if (v == null){
+            v = startTimer(timer * 60)
+        }else {
+            clearImmediate()
+        }
     }
-
-    
 
 
 

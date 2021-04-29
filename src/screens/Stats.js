@@ -52,9 +52,6 @@ const Stats = ({ navigation }) => {
         dispatch(getStats(selectedIndex))
         console.log(stats)
     }, [selectedIndex])
-    const renderItem = ({item} ) => (
-        <TaskItem task={item} />
-    );
 
     return (
         <View style={styles.container}>
@@ -77,9 +74,9 @@ const Stats = ({ navigation }) => {
                         center={[8, 8]}
                         absolute
                     />
-                </View>
 
-                <ButtonGroup containerStyle={{width: "85%", marginTop: 0}} selectedButtonStyle={{backgroundColor: "#FF5B5B"}} borderColor={"#fff"} innerBorderStyle={{color: "#fff"}} textStyle={{color: "#959595"}} buttons={buttons} theme={{colors:[]}} selectedIndex={selectedIndex} onPress={updateIndex}/>
+
+                <ButtonGroup containerStyle={{width: "85%", marginTop: 0}} selectedButtonStyle={{backgroundColor: "#FF5B5B"}} borderColor={"#fff"} innerBorderStyle={{color: "#fff"}} textStyle={{color: "#959595"}} alignItems= {"center"} buttons={buttons} theme={{colors:[]}} selectedIndex={selectedIndex} onPress={updateIndex}/>
                 {selectedIndex === 0 && <Text style={{marginLeft: 10, marginTop: 10, marginBottom: 2}}>(Repeat every day)</Text>}
                 {selectedIndex === 1 && <Text style={{marginLeft: 10, marginTop: 10, marginBottom: 2}}>(Reapeat once a week)</Text>}
                 {selectedIndex === 2 && <Text style={{marginLeft: 10, marginTop: 10, marginBottom: 2}}>(Repeat once a month)</Text>}
@@ -87,6 +84,7 @@ const Stats = ({ navigation }) => {
                 <TouchableOpacity style={styles.stats} onPress={() => {navigation.navigate("Tabs")}}>
                     <Text style={styles.statsText}>Back</Text>
                 </TouchableOpacity>
+                </View>
                 
             </ScrollView>
 
@@ -100,7 +98,7 @@ const styles = StyleSheet.create({
       justifyContent: "flex-start",
       backgroundColor: '#fff',
       alignItems: 'center',
-      paddingTop: 50,
+      padding: 16,
       height: "100%",
     },
     sectionTodoTitle: {
@@ -119,7 +117,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#FF5B5B",
         color: "white",
         borderColor: "white",
-        width: 260,
+        width: 270,
         margin: 10,
         height: 40,
         marginBottom: 8,
