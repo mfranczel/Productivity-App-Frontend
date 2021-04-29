@@ -8,8 +8,7 @@ const initialState = {
     loading: false,
     tasks: []
 }
-
-// 
+ 
 const taskSlice = createSlice({
     name: "tasks",
     initialState,
@@ -29,11 +28,10 @@ const taskSlice = createSlice({
     }
 })
 
-// 
 export const getTasks = () => async (dispatch) => {
     dispatch(taskSlice.actions.setLoading(true))
     try {
-        var tasks = await TaskService.getTasks()
+        var tasks = await TaskService.getTasks(0)
         dispatch(taskSlice.actions.setTasks(tasks))
     } catch (err) {
         dispatch(taskSlice.actions.setError(err.message))
@@ -41,7 +39,45 @@ export const getTasks = () => async (dispatch) => {
         dispatch(taskSlice.actions.setLoading(false))
     }
 }
-// 
+
+
+export const getTasksDaily = () => async (dispatch) => {
+    dispatch(taskSlice.actions.setLoading(true))
+    try {
+        var tasks = await TaskService.getTasks('/todo/monthly')
+        dispatch(taskSlice.actions.setTasks(tasks))
+    } catch (err) {
+        dispatch(taskSlice.actions.setError(err.message))
+    } finally {
+        dispatch(taskSlice.actions.setLoading(false))
+    }
+}
+
+
+export const getTasksWeekly = () => async (dispatch) => {
+    dispatch(taskSlice.actions.setLoading(true))
+    try {
+        var tasks = await TaskService.getTasks('/todo/monthly')
+        dispatch(taskSlice.actions.setTasks(tasks))
+    } catch (err) {
+        dispatch(taskSlice.actions.setError(err.message))
+    } finally {
+        dispatch(taskSlice.actions.setLoading(false))
+    }
+}
+
+export const getTasksMonthly = () => async (dispatch) => {
+    dispatch(taskSlice.actions.setLoading(true))
+    try {
+        var tasks = await TaskService.getTasks('/todo/monthly')
+        dispatch(taskSlice.actions.setTasks(tasks))
+    } catch (err) {
+        dispatch(taskSlice.actions.setError(err.message))
+    } finally {
+        dispatch(taskSlice.actions.setLoading(false))
+    }
+}
+
 export const addTask = (task) => async (dispatch) => {
     dispatch(taskSlice.actions.setLoading(true))
     try {

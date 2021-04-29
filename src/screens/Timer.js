@@ -12,15 +12,34 @@ const Timer = ({ navigation }) => {
     const onPressBreaksUp = () => setBreaks(prevBreaks => prevBreaks + 1)
     const onPressBreaksDown = () => setBreaks(prevBreaks => ((prevBreaks - 1 < 1) ? 1:  prevBreaks - 1 ))
 
-    const [timer, setTimer] = useState(25);
-    const onPressTimerUp = () => setTimer(prevTimer => prevTimer + 1)
-    const onPressTimerDown = () => setTimer(prevTimer => ((prevTimer -1 < 1) ? 1 : prevTimer - 1))
+    const [timer, setTimerMinutes] = useState(25);
+    const onPressTimerUp = () => setTimerMinutes(prevTimer => prevTimer + 1)
+    const onPressTimerDown = () => setTimerMinutes(prevTimer => ((prevTimer -1 < 1) ? 1 : prevTimer - 1))
+    
+    const [timerSeconds, setTimerSeconds] = useState("00");
+
 
     const onPressReset = () => {
         setRounds(1)
         setBreaks(5)
-        setTimer(25)
+        setTimerMinutes(25)
+        setTimerSeconds("00")
     }
+
+    const onPressPause = () => {
+        // pass
+    }
+
+    var v = null
+    const onPressStart = () => {
+        // if (v == null){
+        //     v = startTimer(timer * 60)
+        // }else {
+        //     clearImmediate()
+        // }
+    }
+
+    
 
 
 
@@ -29,7 +48,7 @@ const Timer = ({ navigation }) => {
             
             <View style={styles.containerTimer}>
                 <View style={styles.alignLeft}>
-                    <Text style={styles.mainTimer}>{timer}:{"00"}</Text>
+                    <Text style={styles.mainTimer}>{timer}:{timerSeconds}</Text>
                     <View>
                         <TouchableOpacity style={styles.arrowsTimer} onPress={onPressTimerUp}>⮝</TouchableOpacity>
                         <TouchableOpacity style={styles.arrowsTimer} onPress={onPressTimerDown}>⮟</TouchableOpacity>
@@ -60,10 +79,10 @@ const Timer = ({ navigation }) => {
 
 
             <View>
-                <TouchableOpacity style={styles.startButton}>
+                <TouchableOpacity style={styles.startButton} onPress={onPressStart}>
                     <Text style={styles.startText}>Start</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.pauseButton}>
+                <TouchableOpacity style={styles.pauseButton} onPress={onPressPause}>
                     <Text style={styles.pauseText}>Pause</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.resetButton} onPress={onPressReset}>

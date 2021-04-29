@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { getProfile } from "./slices/userSlice"
 import Login from './screens/Login'
 import Register from './screens/Register'
+import Stats from './screens/Stats'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import Tabs from './navigation/Tabs';
@@ -25,7 +26,11 @@ const Home = () => {
             <Stack.Navigator screenOptions={{headerShown: false}}>
                 {
                     isAuth ? (
+                        <>
                         <Stack.Screen name="Tabs" component={Tabs} />
+                        <Stack.Screen name="Stats" component={Stats} />
+                        </>
+
                     ) : (
                         <>
                         <Stack.Screen name="Login" component={Login} />

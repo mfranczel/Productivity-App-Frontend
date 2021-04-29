@@ -1,19 +1,29 @@
-import React, {useState} from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { SwipeListView, SwipeRow } from 'react-native-swipe-list-view'
 
-const TaskItem = (props) => {
+import React, { useEffect, useState, useRef} from 'react'
+import { Animated, Text, TouchableOpacity, View, StyleSheet, Dimensions } from 'react-native'
+import { Swipeable } from 'react-native-gesture-handler'
+
+
+import { useDispatch, useSelector } from 'react-redux'
+import { removeTask } from '../slices/taskSlice'
+
+const TaskItem = (task) => {
 
   // const data = useState(["do", "did,", "to be done"])
 
+  const dispatch = useDispatch()
+  const swipeableRef = useRef(null);
+
   return (
-    <View style={styles.container}>
-      <View style={styles.alignLeft}>
-        <View style={styles.tapElement}></View>
-        <Text style={styles.itemText}>{props.text}</Text>
-      </View>
-      <View style={styles.cross}>✕</View>
-    </View>
+     <View style={styles.container}>
+       <View style={styles.alignLeft}>
+         <View style={styles.tapElement}></View>
+         <Text style={styles.itemText}>{task.text.text}</Text>
+       </View>
+       <TouchableOpacity style={styles.cross} onPress={() => {dispatch(removeTask(task.text.id))}}>
+         <View style={styles.cross}>✕</View>
+       </TouchableOpacity>
+     </View>
   )
 }
 
@@ -51,7 +61,7 @@ const styles = StyleSheet.create({
   },
 
   itemText: {
-    maxWidth: '70%',
+    maxWidth: '90%',
   },
 
   cross: {

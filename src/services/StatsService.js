@@ -3,7 +3,7 @@ import * as SecureStore from 'expo-secure-store';
 import { Platform } from 'react-native';
 
 export default {
-    getTasks: async (path) => { 
+    getStatsDaily: async (path) => { 
         var token = ""
         if (Platform.OS !== 'web') {
             token = await SecureStore.getItemAsync('token');
@@ -13,7 +13,7 @@ export default {
         if (token){
             try {
                 // for now it is fixed -- daily
-                var res = await axios.get('/todo/daily', {headers: {"Authorization": `Bearer ${token}`}})
+                var res = await axios.get('/stats/daily', {headers: {"Authorization": `Bearer ${token}`}})
                 return res.data
             } catch(e) {
                 if (e.response) {
@@ -32,18 +32,19 @@ export default {
             throw "User not logged in"
         }
     },
-    addTask: async (task) => {
+    getStatsWeekly: async (path) => { 
         var token = ""
         if (Platform.OS !== 'web') {
             token = await SecureStore.getItemAsync('token');
         } else {
             token = localStorage.getItem('token')
         }
-        if (token){ 
+        if (token){
             try {
-                // if problem change todo to task
-                await axios.post('todo', task, {headers: {"Authorization": `Bearer ${token}`}})
-            } catch (e) {
+                // for now it is fixed -- daily
+                var res = await axios.get('/stats/weekly', {headers: {"Authorization": `Bearer ${token}`}})
+                return res.data
+            } catch(e) {
                 if (e.response) {
                     if (error.response.status == 500) {
                         throw "Server error"
@@ -60,17 +61,19 @@ export default {
             throw "User not logged in"
         }
     },
-    removeTask: async (id) => {
+    getStatsMonthly: async (path) => { 
         var token = ""
         if (Platform.OS !== 'web') {
             token = await SecureStore.getItemAsync('token');
         } else {
             token = localStorage.getItem('token')
         }
-        if (token){ 
+        if (token){
             try {
-                await axios.delete('todo/' + id, {headers: {"Authorization": `Bearer ${token}`}})
-            } catch (e) {
+                // for now it is fixed -- daily
+                var res = await axios.get('/stats/monthly', {headers: {"Authorization": `Bearer ${token}`}})
+                return res.data
+            } catch(e) {
                 if (e.response) {
                     if (error.response.status == 500) {
                         throw "Server error"
@@ -86,34 +89,5 @@ export default {
         } else {
             throw "User not logged in"
         }
-    },
-    // TODO > this remake for change state with put -TBD
-
-    // completeTask: async (id) => {
-    //     var token = ""
-    //     if (Platform.OS !== 'web') {
-    //         token = await SecureStore.getItemAsync('token');
-    //     } else {
-    //         token = localStorage.getItem('token')
-    //     }
-    //     if (token){ 
-    //         try {
-    //             await axios.post('todo/' + id, {action: "complete"} ,{headers: {"Authorization": `Bearer ${token}`}})
-    //         } catch (e) {
-    //             if (e.response) {
-    //                 if (error.response.status == 500) {
-    //                     throw "Server error"
-    //                 } else {
-    //                     throw "Unknown error"
-    //                 }
-    //             } else if (e.request) {
-    //                 throw "Cannot reach server"
-    //             } else {
-    //                 throw "App error"
-    //             }
-    //         }
-    //     } else {
-    //         throw "User not logged in"
-    //     }
-    // }
+    }
 }
