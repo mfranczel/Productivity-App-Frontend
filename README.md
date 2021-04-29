@@ -42,7 +42,27 @@ npm run start
 ```
 
 ## Screenshoots
+Login 
+![todoList](./screens/Screenshot_1619732603.png)
+
+Registracia
+![Timer](./screens/Screenshot_1619732607.png)
+
+Habits
+![habit](./screens/Screenshot_1619732568.png)
+
+New Habit
+![nHabit](./screens/Screenshot_1619732573.png)
+
+Timer
+![Timer](./screens/Screenshot_1619732586.png)
+
+Timer running
+![runtimer](./screens/Screenshot_1619732592.png)
+
 
 ![taskNew](./screens/taskNew.PNG)
 ![todoList](./screens/todoList.PNG)
 ![Timer](./screens/Timer.PNG)
+
+
