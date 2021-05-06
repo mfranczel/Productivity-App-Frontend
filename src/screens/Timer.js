@@ -4,6 +4,8 @@ import React, {useState} from 'react'
 import { useEffect } from 'react';
 import { TextInput, View, StyleSheet, Text, Button, TouchableOpacity, Animated } from "react-native"
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
+import constants from '../constants';
+import { w3cwebsocket as W3CWebSocket } from "websocket";
 
 const Timer = ({ navigation }) => {
 
@@ -23,12 +25,18 @@ const Timer = ({ navigation }) => {
     const [isTimerPlaying, setTimerPlaying] = useState(false)
     const [isTimerRunning, setTimerRunning] = useState(false)
     const [showBreak, setShowBreak] = useState(false)
+    const [quote, setQuote] = useState("")
 
-    function startTimer (duration){
-
-        
-    }
-
+    useEffect(() => {
+        var ws = new W3CWebSocket(constants.SOCKET_URL);
+        ws.onmessage = function (event) {
+            setQuote("“" + event.data + "”");
+        }
+        ws.onopen = function() {}
+        return () => {
+            ws.close()
+        }
+    }, [])
 
     const onPressReset = () => {
         setRounds(1)
@@ -54,10 +62,9 @@ const Timer = ({ navigation }) => {
     }
 
 
-
-
     return (
         <View style={styles.container}>
+            <Text style={styles.quote}>{quote}</Text>
             {!isTimerRunning ? (<>
             <View style={styles.containerTimer}>
                 <View style={styles.alignLeft}>
@@ -180,10 +187,18 @@ const styles = StyleSheet.create({
       flex: 1,
       backgroundColor: '#fff',
       alignItems: 'center',
-      paddingTop: 150,
+      paddingTop: 80,
       height: "100%"
     },
 
+    quote: {
+        width: 260,
+        height: 50,
+        marginBottom: 40,
+        fontSize: 14,
+        fontStyle: "italic",
+        textAlign: "center"
+    },
     startButton: {
         borderWidth: 1,
         borderColor: "#ff5b5b",

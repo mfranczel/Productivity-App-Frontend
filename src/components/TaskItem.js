@@ -1,5 +1,6 @@
 
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useEffect, useState, useRef} from 'react'
 import { Animated, Text, TouchableOpacity, View, StyleSheet, Dimensions } from 'react-native'
@@ -20,12 +21,16 @@ const TaskItem = (task) => {
      <View style={styles.container}>
        <View style={styles.alignLeft}>
          <TouchableOpacity style={styles.cross} onPress={() => {dispatch(completeTask(task.text.id, task.text.type))}}>
-            <View style={styles.tapElement}></View>
+            <View style={styles.tapElement}>
+              {
+                task.task.task_state.state == 2 && <FontAwesomeIcon icon={faTimes} size={24}/>
+              }
+            </View>
          </TouchableOpacity>
          <Text style={styles.itemText}>{task.text.text}</Text>
        </View>
        <TouchableOpacity style={styles.cross} onPress={() => {dispatch(removeTask(task.text.id, task.text.type))}}>
-         <View style={styles.cross} >  x </View>
+         <View style={styles.cross}><Text><FontAwesomeIcon icon={faTimes} /></Text></View>
        </TouchableOpacity>
      </View>
   )

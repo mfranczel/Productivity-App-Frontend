@@ -64,7 +64,7 @@ const Register = ({ navigation }) => {
             <TextInput secureTextEntry={true} style={styles.input} placeholder="Password" value={password} onChangeText={ text => setPassword(text)}  onEndEditing={() => checkPassword()}/>
             <Text style={{width: 260, color: "red" }}>{passwordError}</Text>
             <TouchableOpacity  onPress={() => setShow(true)}>
-                <TextInput style={styles.input} placeholder="04/20/1969" editable={false} value={birthDate.getDate() + "/" + (birthDate.getMonth()+1) + "/" + birthDate.getFullYear()}/>
+                <TextInput style={styles.input} placeholder="Birthdate" editable={false} value={birthDate.getDate() + "/" + (birthDate.getMonth()+1) + "/" + birthDate.getFullYear()}/>
             </TouchableOpacity>
             {
               show && <DateTimePicker maximumDate={new Date().setFullYear(new Date().getFullYear() - 10)} minimumDate={new Date().setFullYear(new Date().getFullYear() - 130)} mode="date" display="spinner" value={birthDate} onChange={onDatePickerChange}/>

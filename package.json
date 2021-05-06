@@ -5,7 +5,9 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "eject": "expo eject"
+    "offline": "expo start --offline",
+    "eject": "expo eject",
+    "postinstall": "remotedev-debugger --hostname localhost --port 5678 --injectserver"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
@@ -13,9 +15,11 @@
     "@fortawesome/react-native-fontawesome": "^0.2.6",
     "@react-native-community/async-storage": "^1.12.1",
     "@react-native-community/datetimepicker": "^3.4.3",
+    "@react-native-community/netinfo": "^6.0.0",
     "@react-navigation/bottom-tabs": "^5.11.9",
     "@react-navigation/native": "^5.9.4",
     "@react-navigation/stack": "^5.14.4",
+    "@redux-offline/redux-offline": "^2.6.0-expo.0",
     "@reduxjs/toolkit": "^1.5.1",
     "axios": "^0.21.1",
     "expo": "~40.0.0",
@@ -40,7 +44,11 @@
     "react-redux": "^7.2.3",
     "redux": "^4.0.5",
     "redux-persist": "^6.0.0",
-    "redux-thunk": "^2.3.0"
+    "redux-promise": "^0.6.0",
+    "redux-thunk": "^2.3.0",
+    "remote-redux-devtools": "^0.5.16",
+    "websocket": "^1.0.34",
+    "ws": "^7.4.5"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0"

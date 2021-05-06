@@ -56,37 +56,40 @@ const Stats = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <ScrollView>
-                <View style={styles.taskWrapper}>
                 <View style={styles.wrapper}>
                     <Text style={styles.sectionTodoTitle}>Stats: not-done/doing/done</Text>
-                
 
-                    <PieChart
-                        data={data}
-                        width={270}
-                        height={160}
-                        chartConfig={{
-                            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                            labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                            style: { borderRadius: 1}}
+                    <View style={{height: 250}}>
+                        { stats[0] > 0 || stats[1] > 0 || stats[2] > 0 ? 
+                        <PieChart
+                            data={data}
+                            width={270}
+                            height={160}
+                            chartConfig={{
+                                color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                                labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                                style: { borderRadius: 1}}
+                            }
+                            accessor={"population"}
+                            backgroundColor={"transparent"}
+                            paddingLeft={"15"}
+                            center={[8, 8]}
+                            absolute
+                        /> :  <Text style={{marginTop: "auto", marginBottom: "auto", color: "grey", width: 270, textAlign: "center"}}>Keine Statistiken zu sehen.</Text>
                         }
-                        accessor={"population"}
-                        backgroundColor={"transparent"}
-                        paddingLeft={"15"}
-                        center={[8, 8]}
-                        absolute
-                    />
+                    </View>
+                    
 
 
-                <ButtonGroup containerStyle={{width: "270", marginTop: 0}} selectedButtonStyle={{backgroundColor: "#FF5B5B"}} borderColor={"#fff"} innerBorderStyle={{color: "#fff"}} textStyle={{color: "#959595"}} alignItems= {"center"} buttons={buttons} theme={{colors:[]}} selectedIndex={selectedIndex} onPress={updateIndex}/>
-                {selectedIndex === 0 && <Text style={{marginLeft: 10, marginTop: 10, marginBottom: 2}}>(Repeat every day)</Text>}
-                {selectedIndex === 1 && <Text style={{marginLeft: 10, marginTop: 10, marginBottom: 2}}>(Reapeat once a week)</Text>}
-                {selectedIndex === 2 && <Text style={{marginLeft: 10, marginTop: 10, marginBottom: 2}}>(Repeat once a month)</Text>}
+                    <ButtonGroup containerStyle={{width: 270, margin: 0}} selectedButtonStyle={{backgroundColor: "#FF5B5B"}} borderColor={"#fff"} innerBorderStyle={{color: "#fff"}} textStyle={{color: "#959595"}} alignItems= {"center"} buttons={buttons} theme={{colors:[]}} selectedIndex={selectedIndex} onPress={updateIndex}/>
+                    {selectedIndex === 0 && <Text style={{marginTop: 10, marginBottom: 2, width: 270, textAlign: "center"}}>(Repeat every day)</Text>}
+                    {selectedIndex === 1 && <Text style={{marginTop: 10, marginBottom: 2, width: 270, textAlign: "center"}}>(Reapeat once a week)</Text>}
+                    {selectedIndex === 2 && <Text style={{marginTop: 10, marginBottom: 2, width: 270, textAlign: "center"}}>(Repeat once a month)</Text>}
 
-                <TouchableOpacity style={styles.stats} onPress={() => {navigation.navigate("Tabs")}}>
-                    <Text style={styles.statsText}>Back</Text>
-                </TouchableOpacity>
-                </View></View>
+                    <TouchableOpacity style={styles.stats} onPress={() => {navigation.navigate("Tabs")}}>
+                        <Text style={styles.statsText}>Back</Text>
+                    </TouchableOpacity>
+                </View>
                 
             </ScrollView>
 
@@ -100,13 +103,13 @@ const styles = StyleSheet.create({
       justifyContent: "flex-start",
       backgroundColor: '#fff',
       alignItems: 'center',
-      padding: 16,
+      paddingTop: 100,
       height: "100%",
     },
     sectionTodoTitle: {
         fontWeight: 'bold',
         fontSize: 20,
-        alignItems: 'center',
+        textAlign: "center"
     },
     tasksItem: {
         marginTop: 20
@@ -117,6 +120,7 @@ const styles = StyleSheet.create({
 
     wrapper: {
         width: 270,
+        alignItems: "center"
     },
     stats: {
         borderWidth: 1,
@@ -124,7 +128,7 @@ const styles = StyleSheet.create({
         color: "white",
         borderColor: "white",
         width: 270,
-        margin: 10,
+        marginTop: 10,
         height: 40,
         marginBottom: 8,
         alignItems: "center",
@@ -132,7 +136,6 @@ const styles = StyleSheet.create({
     statsText: {
         marginTop: "auto",
         marginBottom: "auto",
-        margin: 5,
         fontWeight: "bold",
         color: "white",
     },

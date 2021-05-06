@@ -19,7 +19,7 @@ export default {
                 if (err.response.status == 400) {
                     throw "Bad credentials"
                 } else if (err.response.status == 500){
-                    throw "Server error occured"
+                    throw "Bad credentials"
                 } else {
                     throw "Other error"
                 }

@@ -1,21 +1,49 @@
 import UserService from '../services/UserService'
 import { createSlice } from '@reduxjs/toolkit'
+import {store} from '../App'
 
 const initialState = {
     isAuth: false,
     isLoading: false,
     error: {message: ""},
-    currentUser: null
+    currentUser: null,
+    token: ""
 }
 
 const userSlice = createSlice({
     name: "advisor",
     initialState,
     reducers: {
+        changeProfile: {
+            reducer: (state, action) => {
+                var profile = action.payload
+                var profileState = {...state.currentUser}
+                profileState.email = profile.email
+                profileState.password = profile.password
+                profileState.birth_date = profile.birthDate
+                var newState = {...state}
+                newState.currentUser = profileState
+                return newState
+            },
+            prepare: (profile) => {
+                var token = store.getState().user.token
+                var meta = {
+                    offline: {
+                        effect: { url: `/user`, body: profile, method: "PUT", headers: {"Authorization": `Bearer ${token}`}},
+                        commit: { type: 'habits/commitProfileChange'},
+                    }
+                }
+                return { meta, payload: profile}
+            }
+        },
+        commitProfileChange(state, action) {
+            return state
+        },
         setAuthSuccess(state, action) {
             var newState = {...state}
             newState.isAuth = true
             newState.currentUser = action.payload
+            newState.token = action.payload.token
             return newState
         },
         setAuthFailed(state, action) {
@@ -33,6 +61,12 @@ const userSlice = createSlice({
             var newState = {...state}
             newState.isAuth = false
             newState.currentUser = {}
+            newState.token = null
+            return newState
+        },
+        setToken(state, action) {
+            var newState = {...state}
+            newState.token = action.payload
             return newState
         }
     }
@@ -75,8 +109,7 @@ export const getProfile = () => async (dispatch) => {
 export const changeProfile = (email, password, birthdate) => async (dispatch) => {
     dispatch(userSlice.actions.setLoading(true))
     try {
-        await UserService.changeProfile(email, password, birthdate)
-        dispatch(userSlice.actions.setAuthSuccess({email, password, birthdate}))
+        dispatch(userSlice.actions.changeProfile({email, password, birthDate: birthdate}))
     } catch (e) {
         console.log(e)
     } finally {
@@ -94,6 +127,11 @@ export const deleteProfile = () => async (dispatch) => {
     } finally {
         dispatch(userSlice.actions.setLoading(false))
     }
+}
+
+export const setToken = (token) => async (dispatch) => {
+    dispatch(userSlice.actions.setToken(token))
+
 }
 
 export default userSlice.reducer

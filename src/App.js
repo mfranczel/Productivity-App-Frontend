@@ -5,7 +5,7 @@ import Home from './Home';
 import {registerRootComponent} from 'expo'
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-const { store } = getStore()
+export const { store } = getStore()
 
 const App = () => {
 
@@ -19,5 +19,4 @@ const App = () => {
 }
 
 registerRootComponent(App)
-
 export default App
