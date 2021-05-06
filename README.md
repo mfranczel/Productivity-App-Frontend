@@ -21,6 +21,10 @@ Github Productivity App BackEnd link - backend: https://github.com/mfranczel/Pro
 
 Figma link: https://www.figma.com/file/3mQ06X0TIL0YV9JzjN36n0/MTAA?node-id=0%3A1
 
+## Bonus
+- pridaný redux-offline na offline sync.
+- pridaný ws na citáty v timeri
+- drobné UI opravy
 
 ## Zmeny oproti návrhu
 - použitie "koláčového" grafu namiesto stĺpcového grafu, viacej sa nám hodí pre prehľadnejšie zobrazenie dát
